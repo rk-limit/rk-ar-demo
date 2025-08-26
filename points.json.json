@@ -1,0 +1,46 @@
+{
+    "wall_id": "ukazka-stena-1",
+    "marker": "hiro",
+    "points": [
+        {
+            "id": "ZS-01",
+            "type": "socket",
+            "label": "Zásuvka 1",
+            "x_cm": 60,
+            "y_cm": 30,
+            "note": "NYM-J 3x2,5; LS-A01"
+        },
+        {
+            "id": "ZS-02",
+            "type": "socket",
+            "label": "Zásuvka 2",
+            "x_cm": 200,
+            "y_cm": 30,
+            "note": "NYM-J 3x2,5; LS-A01"
+        },
+        {
+            "id": "VYP-01",
+            "type": "switch",
+            "label": "Vypínač",
+            "x_cm": 15,
+            "y_cm": 105,
+            "note": "KNX alebo klasický"
+        },
+        {
+            "id": "SV-01",
+            "type": "light",
+            "label": "Svetlo 1",
+            "x_cm": 120,
+            "y_cm": 240,
+            "note": "stena/strop"
+        },
+        {
+            "id": "SV-02",
+            "type": "light",
+            "label": "Svetlo 2",
+            "x_cm": 260,
+            "y_cm": 240,
+            "note": "stena/strop"
+        }
+    ]
+}
