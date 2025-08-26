@@ -14,7 +14,7 @@
             "id": "ZS-02",
             "type": "socket",
             "label": "Zásuvka 2",
-            "x_cm": 200,
+            "x_cm": 2000,
             "y_cm": 30,
             "note": "NYM-J 3x2,5; LS-A01"
         },
@@ -44,4 +44,5 @@
         }
     ]
 }
+
 
