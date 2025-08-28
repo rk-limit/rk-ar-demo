@@ -1,108 +1,57 @@
 <!doctype html>
 <html lang="sk">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AR ukážka – zásuvky/svetlá/vypínač</title>
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Izba – menu</title>
   <style>
-    body{margin:0;font-family:system-ui,Arial}
-    .hud{position:fixed;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);color:#fff;padding:8px 12px;display:flex;gap:8px;flex-wrap:wrap}
-    .btn{background:#fff;color:#000;border-radius:8px;padding:6px 10px;font-weight:600;border:0}
-    .spacer{flex:1}
+    body{font-family:system-ui,Arial;margin:0;background:#0b0d12;color:#fff}
+    .wrap{max-width:720px;margin:0 auto;padding:24px}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    header img{width:36px;height:36px}
+    .card{background:#121521;border:1px solid #1e2230;border-radius:14px;padding:16px 18px;margin:12px 0}
+    .card a{display:block;text-decoration:none;color:#fff;padding:12px 0}
+    .card a span{opacity:.7;font-size:14px;display:block}
+    .btn{display:inline-block;background:#1e90ff;border:0;color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;text-decoration:none}
+    .muted{opacity:.75}
   </style>
 </head>
 <body>
-  <a-scene embedded vr-mode-ui="enabled:false"
-           renderer="logarithmicDepthBuffer:true;antialias:true"
-           arjs="sourceType: webcam; debugUIEnabled:false; trackingMethod: best;">
-    <!-- HIRO marker = rovina steny -->
-    <a-marker id="marker" preset="hiro">
-      <a-entity id="points-root"></a-entity>
-    </a-marker>
-    <a-entity camera></a-entity>
-  </a-scene>
+  <div class="wrap">
+    <header>
+      <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
+      <h1 id="title">Jednotka</h1>
+    </header>
 
-  <div class="hud">
-    <div><b>Namier kameru na HIRO marker</b></div>
-    <div class="spacer"></div>
-    <button class="btn" id="toggleLabels">Štítky on/off</button>
-    <button class="btn" data-layer="socket">Zásuvky</button>
-    <button class="btn" data-layer="switch">Vypínač</button>
-    <button class="btn" data-layer="light">Svetlá</button>
+    <div class="card">
+      <a id="floorLink" target="_blank">🗺️ Kompletný plán poschodia <span>PDF súbor</span></a>
+      <a id="roomLink"  target="_blank">📐 Plán tejto izby <span>PDF s vyznačením</span></a>
+      <a id="arLink">🧩 Vizualizácia (AR – HIRO) <span>Otvorí kameru</span></a>
+      <a id="todoLink">✅ To-Do list <span>Úlohy pre túto izbu</span></a>
+      <a id="panelLink" target="_blank">⚡ Plán rozvádzača <span>PDF schéma</span></a>
+    </div>
+
+    <p class="muted">Ak sa niečo neotvára, skontroluj, či v linku je správne <code>?room=...</code></p>
   </div>
 
   <script>
-    const JSON_URL = 'points.json';
-    const SCALE = 0.01; // cm -> m
-    const root = document.getElementById('points-root');
-    const toggleBtn = document.getElementById('toggleLabels');
-    let labelsVisible = true;
-    let currentLayer = null;
+    const params = new URLSearchParams(location.search);
+    const room = params.get('room');
+    document.getElementById('title').textContent = room ? `Jednotka ${room}` : 'Jednotka (neznáma)';
 
-    const typeColor = { socket:'#0A84FF', switch:'#34C759', light:'#FFD60A' };
+    async function boot(){
+      if(!room){ alert('Chýba parameter ?room='); return; }
+      const m = await fetch('rooms.json').then(r=>r.json());
+      const cfg = m[room];
+      if(!cfg){ alert('Neznáma jednotka: ' + room); return; }
 
-    AFRAME.registerComponent('look-at', {
-      schema:{type:'selector'},
-      tick:function(){
-        const target = this.data || this.el.sceneEl.camera.el;
-        if(target) this.el.object3D.lookAt(target.object3D.position);
-      }
-    });
-
-    function makePoint(p){
-      const x = p.x_cm * SCALE, y = p.y_cm * SCALE, z = 0;
-      const g = document.createElement('a-entity'); g.dataset.type = p.type;
-
-      const dot = document.createElement('a-sphere');
-      dot.setAttribute('position', `${x} ${y} ${z}`);
-      dot.setAttribute('radius', 0.02);
-      dot.setAttribute('color', typeColor[p.type] || '#FF9F0A');
-      dot.setAttribute('opacity', 0.95);
-
-      const label = document.createElement('a-entity');
-      label.setAttribute('position', `${x} ${y + 0.06} ${z}`);
-      label.setAttribute('look-at', '[camera]');
-      label.setAttribute('visible', labelsVisible);
-
-      const bg = document.createElement('a-plane');
-      bg.setAttribute('width', 0.32); bg.setAttribute('height', 0.08);
-      bg.setAttribute('color', '#000'); bg.setAttribute('opacity', 0.6); bg.setAttribute('radius', 0.01);
-
-      const txt = document.createElement('a-text');
-      txt.setAttribute('value', `${p.label} • ${p.y_cm} cm`);
-      txt.setAttribute('align','center'); txt.setAttribute('width',1);
-      txt.setAttribute('color','#fff'); txt.setAttribute('position','0 0 0.01');
-
-      label.appendChild(bg); label.appendChild(txt);
-      dot.addEventListener('click', ()=> alert(`${p.label}\nTyp: ${p.type}\nVýška: ${p.y_cm} cm\nPoznámka: ${p.note||'-'}`));
-      g.appendChild(dot); g.appendChild(label);
-      return g;
+      document.getElementById('floorLink').href = cfg.floor_pdf;
+      document.getElementById('roomLink').href  = cfg.room_pdf;
+      document.getElementById('panelLink').href = cfg.panel_pdf;
+      document.getElementById('arLink').href    = `ar/index.html?room=${encodeURIComponent(room)}`;
+      document.getElementById('todoLink').href  = `todo/index.html?room=${encodeURIComponent(room)}`;
     }
-
-    async function init(){
-      const res = await fetch(JSON_URL); const data = await res.json();
-      data.points.forEach(p => root.appendChild(makePoint(p)));
-    }
-
-    toggleBtn.addEventListener('click', ()=>{
-      labelsVisible = !labelsVisible;
-      [...root.children].forEach(g => g.children[1]?.setAttribute('visible', labelsVisible));
-    });
-
-    document.querySelectorAll('[data-layer]').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const layer = btn.getAttribute('data-layer');
-        currentLayer = (currentLayer === layer) ? null : layer;
-        [...root.children].forEach(g=>{
-          const show = !currentLayer || g.dataset.type === currentLayer;
-          g.setAttribute('visible', show);
-        });
-      });
-    });
-
-    init();
+    boot();
   </script>
 </body>
 </html>
