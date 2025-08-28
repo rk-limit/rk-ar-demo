@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Menu – izba</title>
+  <style>
+    body{font-family:system-ui,Arial;margin:0;background:#0b0d12;color:#fff}
+    .wrap{max-width:720px;margin:0 auto;padding:24px}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .card{background:#121521;border:1px solid #1e2230;border-radius:14px;padding:16px 18px;margin:12px 0}
+    .card a{display:block;text-decoration:none;color:#fff;padding:12px 0}
+    .card a span{opacity:.7;font-size:14px;display:block}
+    .muted{opacity:.75}
+    code{background:#111827;border-radius:6px;padding:2px 6px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header><h1 id="title">Jednotka</h1></header>
+
+    <div class="card">
+      <a id="floorLink" target="_blank">🗺️ Kompletný plán poschodia <span>PDF</span></a>
+      <a id="roomLink"  target="_blank">📐 Plán tejto izby <span>PDF</span></a>
+      <a id="arLink">🧩 Vizualizácia (AR – HIRO) <span>Otvorí kameru</span></a>
+      <a id="todoLink">✅ To-Do list <span>Úlohy pre túto izbu</span></a>
+      <a id="panelLink" target="_blank">⚡ Plán rozvádzača <span>PDF</span></a>
+    </div>
+
+    <p class="muted">Otvorené pre: <code id="roomLabel"></code></p>
+  </div>
+
+  <script>
+    const p = new URLSearchParams(location.search);
+    const room = p.get('room');
+    if(!room){
+      document.getElementById('title').textContent = 'Chýba parameter ?room=...';
+      throw new Error('Missing ?room');
+    }
+    document.getElementById('title').textContent = `Jednotka ${room}`;
+    document.getElementById('roomLabel').textContent = room;
+
+    // (A) Ak ešte nemáš rooms.json, nastavíme aspoň To-Do a AR priamo:
+    document.getElementById('todoLink').href = `todo/index.html?room=${encodeURIComponent(room)}`;
+    document.getElementById('arLink').href   = `ar/index.html?room=${encodeURIComponent(room)}`;
+
+    // (B) Ak máš rooms.json, odkomentuj blok nižšie a vyplní aj PDF linky:
+    /*
+    fetch('rooms.json').then(r=>r.json()).then(map=>{
+      const cfg = map[room];
+      if(!cfg){ alert('Izba nie je v rooms.json'); return; }
+      document.getElementById('floorLink').href = cfg.floor_pdf;
+      document.getElementById('roomLink').href  = cfg.room_pdf;
+      document.getElementById('panelLink').href = cfg.panel_pdf;
+      document.getElementById('todoLink').href  = `todo/index.html?room=${encodeURIComponent(room)}`;
+      document.getElementById('arLink').href    = `ar/index.html?room=${encodeURIComponent(room)}`;
+    }).catch(()=>{});
+    */
+  </script>
+</body>
+</html>
