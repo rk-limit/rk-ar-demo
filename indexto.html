@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>To-Do – izba</title>
+  <style>
+    :root { --bg:#0b0d12; --card:#121521; --line:#1e2230; --text:#e8ecf4; --muted:#94a3b8; }
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Arial}
+    .wrap{max-width:900px;margin:0 auto;padding:20px}
+    h1{font-size:20px;margin:8px 0 14px}
+    .table{width:100%;border-collapse:separate;border-spacing:0 10px}
+    .row{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+    .row th,.row td{padding:10px 12px;vertical-align:middle}
+    .head{background:#0f1320;border:1px solid var(--line);border-radius:12px;margin-bottom:8px}
+    .head th{padding:10px 12px;font-weight:700;text-align:left}
+    .col-s{width:90px;color:var(--muted)}
+    .col-stage{width:60px;text-align:center;color:var(--muted)}
+    .box{width:22px;height:22px;border:2px solid var(--line);border-radius:6px;margin:0 auto;background:#0f1320}
+    .section{margin-top:18px}
+    .note-row{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0}
+    .note-label{flex:1}
+    .empty{min-height:22px;border:2px dashed var(--line);border-radius:8px;padding:8px 10px;color:var(--muted)}
+    .muted{color:var(--muted);font-size:13px;margin-top:6px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .pill{background:#12233a;border:1px solid #1c2d49;border-radius:999px;padding:6px 10px;font-size:12px;color:#cde1ff}
+    a.btn{background:#1e90ff;color:#fff;text-decoration:none;padding:8px 12px;border-radius:10px;font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <h1 id="title">Úlohy – izba</h1>
+      <a class="btn" id="back" href="../index.html">← Menu</a>
+    </div>
+
+    <!-- Hlavička tabuľky -->
+    <table class="table">
+      <thead class="head">
+        <tr>
+          <th class="col-s">Obvod</th>
+          <th>Názov</th>
+          <th class="col-stage">①</th>
+          <th class="col-stage">②</th>
+          <th class="col-stage">③</th>
+          <th class="col-stage">④</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="muted">①–④ sú kroky (napr. drážkovanie, kábel, osadenie, hotovo). Zatiaľ len vizuálne, bez funkcie.</div>
+
+    <!-- Sekcia poznámok (podľa tvojej fotky) -->
+    <div class="section" id="notes"></div>
+  </div>
+
+  <script>
+    // načítaj ?room=
+    const params = new URLSearchParams(location.search);
+    const room = params.get('room') || '101-A';
+    document.getElementById('title').textContent = `Úlohy – ${room}`;
+    document.getElementById('back').href = `../index.html?room=${encodeURIComponent(room)}`;
+
+    async function boot(){
+      // JSON súbor pre danú izbu
+      const url = `${room}.json`;
+      try{
+        const data = await fetch(url).then(r=>r.json());
+        renderTable(data);
+        renderNotes(data);
+      }catch(e){
+        alert('Chýba súbor s úlohami: ' + url);
+      }
+    }
+
+    function renderTable(data){
+      const tbody = document.getElementById('tbody');
+      data.obvody.forEach(o=>{
+        const tr = document.createElement('tr');
+        tr.className = 'row';
+        tr.innerHTML = `
+          <td class="col-s"><span class="pill">${escapeHtml(o.kod)}</span></td>
+          <td>${escapeHtml(o.nazov)}</td>
+          <td class="col-stage"><div class="box"></div></td>
+          <td class="col-stage"><div class="box"></div></td>
+          <td class="col-stage"><div class="box"></div></td>
+          <td class="col-stage"><div class="box"></div></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderNotes(data){
+      const host = document.getElementById('notes');
+      (data.poznamky || []).forEach(n=>{
+        const row = document.createElement('div');
+        row.className = 'note-row';
+        row.innerHTML = `
+          <div class="note-label">${escapeHtml(n)}</div>
+          <div class="empty"></div>
+        `;
+        host.appendChild(row);
+      });
+    }
+
+    function escapeHtml(s){
+      return (s??'').toString().replace(/[&<>"']/g, m => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+      }[m]));
+    }
+
+    boot();
+  </script>
+</body>
+</html>
