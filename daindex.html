@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stav poschodia</title>
+<style>
+  body{margin:0;background:#0b0d12;color:#e8ecf4;font-family:system-ui}
+  .wrap{display:flex;gap:16px;padding:12px}
+  .svgwrap{flex:1;position:relative}
+  .svgwrap svg{width:100%;height:auto;display:block}
+  .overlay{position:absolute;inset:0;pointer-events:none}
+  .tick{position:absolute;transform:translate(-50%,-50%);font-weight:900}
+  .tick.done{color:#31d158} .tick.todo{color:#ff6666;opacity:.8}
+  .room-done{ fill:#9aa0a6; fill-opacity:.35; }
+  .panel{width:320px;background:#121521;border:1px solid #1e2230;border-radius:12px;padding:12px}
+  .badge{display:inline-block;background:#1e2a44;border:1px solid #2d3e63;border-radius:999px;padding:2px 8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="svgwrap">
+    <div id="svgHost"></div>
+    <div id="overlay" class="overlay"></div>
+  </div>
+  <div class="panel">
+    <h3>Stav izieb</h3>
+    <div id="status"></div>
+  </div>
+</div>
+
+<script>
+const SHEET_API = 'SEM_VLOŽ_TVOJU_APPS_SCRIPT_URL/exec'; // rovnaké ako v To-Do
+const SVG_URL = 'floor.svg';
+const MAP_URL = 'mapping.json';
+
+const svgHost = document.getElementById('svgHost');
+const overlay = document.getElementById('overlay');
+const statusBox = document.getElementById('status');
+let mapping = {};
+
+async function loadSVGInline(url){
+  const txt = await fetch(url).then(r=>r.text());
+  svgHost.innerHTML = txt;
+  return svgHost.querySelector('svg');
+}
+function placeTick(room, circuit, done){
+  const m = mapping[room]; if(!m) return;
+  const p = m.circuits?.[circuit]; if(!p) return;
+  const svg = svgHost.querySelector('svg');
+  const vb = svg.viewBox.baseVal;
+  const rect = svg.getBoundingClientRect();
+  const x = (p.x - vb.x)/vb.width * rect.width;
+  const y = (p.y - vb.y)/vb.height* rect.height;
+  const el = document.createElement('div');
+  el.className = 'tick ' + (done?'done':'todo');
+  el.textContent = done ? '✔' : '✗';
+  el.style.left = x+'px'; el.style.top = y+'px';
+  overlay.appendChild(el);
+}
+function colorRoomIfAllDone(room, records){
+  const m = mapping[room]; if(!m || !m.area_id) return;
+  const needed = Object.keys(m.circuits||{});
+  const doneSet = new Set(records.filter(r=>r.status==='hotovo').map(r=>r.circuit));
+  const all = needed.length>0 && needed.every(k=>doneSet.has(k));
+  const area = svgHost.querySelector('#'+m.area_id);
+  if (area) area.classList.toggle('room-done', all);
+}
+async function refresh(){
+  overlay.innerHTML=''; statusBox.innerHTML='';
+  await loadSVGInline(SVG_URL);
+  mapping = await fetch(MAP_URL).then(r=>r.json());
+  const res = await fetch(SHEET_API).then(r=>r.json());
+  const byRoom = {};
+  (res.items||[]).forEach(i => (byRoom[i.room] ||= []).push(i));
+
+  Object.keys(mapping).forEach(room=>{
+    const items = byRoom[room]||[];
+    const codes = Object.keys(mapping[room].circuits||{});
+    codes.forEach(code=>{
+      const rec = items.find(x=>x.circuit===code);
+      placeTick(room, code, !!rec && rec.status==='hotovo');
+    });
+    colorRoomIfAllDone(room, items);
+    const done = items.filter(i=>i.status==='hotovo' && codes.includes(i.circuit)).length;
+    const div = document.createElement('div');
+    div.innerHTML = `<div class="badge">${room}: ${done}/${codes.length} hotovo</div>`;
+    statusBox.appendChild(div);
+  });
+}
+refresh();
+setInterval(refresh, 5000);
+</script>
+</body>
+</html>
