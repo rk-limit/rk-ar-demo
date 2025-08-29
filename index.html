@@ -57,5 +57,31 @@
     }).catch(()=>{});
     */
   </script>
+  <script>
+  const p = new URLSearchParams(location.search);
+  const room = p.get('room');
+  if(!room){
+    document.getElementById('title').textContent = 'Chýba parameter ?room=...';
+    throw new Error('Missing ?room');
+  }
+  document.getElementById('title').textContent = `Jednotka ${room}`;
+  document.getElementById('roomLabel').textContent = room;
+
+  // načítanie rooms.json
+  fetch('rooms.json')
+    .then(r => r.json())
+    .then(map => {
+      const cfg = map[room];
+      if(!cfg){ alert('Izba nie je v rooms.json'); return; }
+      document.getElementById('floorLink').href = cfg.floor_pdf;
+      document.getElementById('roomLink').href  = cfg.room_pdf;
+      document.getElementById('panelLink').href = cfg.panel_pdf;
+      document.getElementById('todoLink').href  = `todo/index.html?room=${encodeURIComponent(room)}`;
+      document.getElementById('arLink').href    = `ar/index.html?room=${encodeURIComponent(room)}`;
+    })
+    .catch(e => alert('Chýba súbor rooms.json alebo je zle napísaný.'));
+</script>
+
 </body>
 </html>
+
