@@ -64,23 +64,25 @@
             // cloud zápis
             try{
               msg('Ukladám…');
-              const res = await fetch(SHEET_API, {
-                method:'POST',
-                headers:{'Content-Type':'application/json'},
-                body: JSON.stringify({
-                  room,
-                  circuit: obvod.kod,
-                  label: obvod.nazov,
-                  status
-                })
-              });
-              if(!res.ok) throw new Error('HTTP '+res.status);
-              msg('Uložené.');
-              setTimeout(()=>msg(''), 1200);
-            }catch(e){
-              console.warn(e);
-              msg('Nepodarilo sa uložiť do cloudu (internet?). Skús neskôr.');
-            }
+              
+              const payload = {
+                room,
+                circuit: obvod.kod,
+                label: obvod.nazov,
+                status
+              };
+              await fetch(SHEET_API, {
+              method: 'POST',
+             // NEPOSIELAJ žiadne headers; pošli čistý string
+             body: JSON.stringify(payload)
+             });
+             msg('Uložené.');
+             setTimeout(()=>msg(''), 1200);
+           } catch (e) {
+            console.warn(e);
+            msg('Nepodarilo sa uložiť do cloudu (internet/CORS). Skús znova.');
+          } 
+            
           };
 
           li.append(chk, code, label);
@@ -91,4 +93,5 @@
   </script>
 </body>
 </html>
+
 
