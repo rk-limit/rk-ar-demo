@@ -1,10 +1,11 @@
 {
-  "EZI1: {
+  "EZI1": {
     "floor_pdf": "pdf/EZI1.pdf",
     "room_pdf":  "pdf/EZI1.pdf",
     "panel_pdf": "pdf/EZI1.pdf"
   }
 }
+
 
 
 
