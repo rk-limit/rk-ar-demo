@@ -71,17 +71,21 @@
                 label: obvod.nazov,
                 status
               };
-              await fetch(SHEET_API, {
-              method: 'POST',
-             // NEPOSIELAJ žiadne headers; pošli čistý string
-             body: JSON.stringify(payload)
+              const res = await fetch(SHEET_API, {
+                method: 'POST',
+                // ŽIADNE headers!
+                // mode: 'no-cors', // <- pridaj len ak by niektorý prehliadač stále hlásil CORS
+                body: JSON.stringify(payload)
              });
+             // ak nepoužijeme no-cors, vieme skontrolovať status:
+             if (res && res.ok === false) throw new Error('HTTP ' + res.status);
+
              msg('Uložené.');
              setTimeout(()=>msg(''), 1200);
            } catch (e) {
-            console.warn(e);
-            msg('Nepodarilo sa uložiť do cloudu (internet/CORS). Skús znova.');
-          } 
+             console.warn(e);
+             msg('Nepodarilo sa uložiť do cloudu. Skús znova (internet/CORS).');
+           }
             
           };
 
@@ -93,5 +97,6 @@
   </script>
 </body>
 </html>
+
 
 
