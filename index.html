@@ -49,9 +49,7 @@
         if (!cfg) { alert('Izba nie je v rooms.json'); return; }
 
         // PDF
-        document.getElementById('floorLink').href = cfg.floor_pdf;
         document.getElementById('roomLink').href  = cfg.room_pdf;
-        document.getElementById('panelLink').href = cfg.panel_pdf;
 
         // To-Do a AR (s parametrom izby)
         document.getElementById('todoLink').href = `todo/index.html?room=${encodeURIComponent(room)}`;
@@ -61,3 +59,4 @@
   </script>
 </body>
 </html>
+
