@@ -3,113 +3,91 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>To-Do – izba</title>
+  <title>To-Do list</title>
   <style>
-    :root { --bg:#0b0d12; --card:#121521; --line:#1e2230; --text:#e8ecf4; --muted:#94a3b8; }
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Arial}
-    .wrap{max-width:900px;margin:0 auto;padding:20px}
-    h1{font-size:20px;margin:8px 0 14px}
-    .table{width:100%;border-collapse:separate;border-spacing:0 10px}
-    .row{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-    .row th,.row td{padding:10px 12px;vertical-align:middle}
-    .head{background:#0f1320;border:1px solid var(--line);border-radius:12px;margin-bottom:8px}
-    .head th{padding:10px 12px;font-weight:700;text-align:left}
-    .col-s{width:90px;color:var(--muted)}
-    .col-stage{width:60px;text-align:center;color:var(--muted)}
-    .box{width:22px;height:22px;border:2px solid var(--line);border-radius:6px;margin:0 auto;background:#0f1320}
-    .section{margin-top:18px}
-    .note-row{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0}
-    .note-label{flex:1}
-    .empty{min-height:22px;border:2px dashed var(--line);border-radius:8px;padding:8px 10px;color:var(--muted)}
-    .muted{color:var(--muted);font-size:13px;margin-top:6px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-    .pill{background:#12233a;border:1px solid #1c2d49;border-radius:999px;padding:6px 10px;font-size:12px;color:#cde1ff}
-    a.btn{background:#1e90ff;color:#fff;text-decoration:none;padding:8px 12px;border-radius:10px;font-weight:700}
+    body { font-family: Arial, sans-serif; background:#0b0d12; color:#e8ecf4; margin:0; padding:20px; }
+    h1 { font-size:20px; margin:0 0 10px }
+    ul { list-style:none; padding:0; margin:0 }
+    li { background:#121521; border:1px solid #1e2230; border-radius:10px; margin:8px 0; padding:12px;
+         display:flex; align-items:center; gap:10px }
+    li.done { background:#15331c; border-color:#255e30 }
+    label { flex:1; cursor:pointer }
+    .pill{background:#1e2a44;border:1px solid #2d3e63;border-radius:999px;padding:2px 8px;font-size:12px;color:#cde1ff}
+    .msg{margin-top:12px;font-size:13px;opacity:.8}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <h1 id="title">Úlohy – izba</h1>
-      <a class="btn" id="back" href="../index.html">← Menu</a>
-    </div>
-
-    <!-- Hlavička tabuľky -->
-    <table class="table">
-      <thead class="head">
-        <tr>
-          <th class="col-s">Obvod</th>
-          <th>Názov</th>
-          <th class="col-stage">①</th>
-          <th class="col-stage">②</th>
-          <th class="col-stage">③</th>
-          <th class="col-stage">④</th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    </table>
-    <div class="muted">①–④ sú kroky (napr. drážkovanie, kábel, osadenie, hotovo). Zatiaľ len vizuálne, bez funkcie.</div>
-
-    <!-- Sekcia poznámok (podľa tvojej fotky) -->
-    <div class="section" id="notes"></div>
-  </div>
+  <h1>Úlohy – <span id="roomName"></span></h1>
+  <ul id="todoList"></ul>
+  <div class="msg" id="msg"></div>
 
   <script>
-    // načítaj ?room=
     const params = new URLSearchParams(location.search);
-    const room = params.get('room') || '101-A';
-    document.getElementById('title').textContent = `Úlohy – ${room}`;
-    document.getElementById('back').href = `../index.html?room=${encodeURIComponent(room)}`;
+    const room = params.get('room') || 'UNKNOWN';
+    document.getElementById('roomName').textContent = room;
 
-    async function boot(){
-      // JSON súbor pre danú izbu
-      const url = `${room}.json`;
-      try{
-        const data = await fetch(url).then(r=>r.json());
-        renderTable(data);
-        renderNotes(data);
-      }catch(e){
-        alert('Chýba súbor s úlohami: ' + url);
-      }
-    }
+    // 🔗 DOPLŇ svoju Apps Script URL (končiacu na /exec)
+    const SHEET_API = "PASTE_YOUR_WEB_APP_URL_HERE";
 
-    function renderTable(data){
-      const tbody = document.getElementById('tbody');
-      data.obvody.forEach(o=>{
-        const tr = document.createElement('tr');
-        tr.className = 'row';
-        tr.innerHTML = `
-          <td class="col-s"><span class="pill">${escapeHtml(o.kod)}</span></td>
-          <td>${escapeHtml(o.nazov)}</td>
-          <td class="col-stage"><div class="box"></div></td>
-          <td class="col-stage"><div class="box"></div></td>
-          <td class="col-stage"><div class="box"></div></td>
-          <td class="col-stage"><div class="box"></div></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
+    const msg = (t)=>document.getElementById('msg').textContent=t;
 
-    function renderNotes(data){
-      const host = document.getElementById('notes');
-      (data.poznamky || []).forEach(n=>{
-        const row = document.createElement('div');
-        row.className = 'note-row';
-        row.innerHTML = `
-          <div class="note-label">${escapeHtml(n)}</div>
-          <div class="empty"></div>
-        `;
-        host.appendChild(row);
-      });
-    }
+    // načítaj zoznam obvodov pre danú izbu
+    fetch(`${room}.json`)
+      .then(r=>r.json())
+      .then(data=>{
+        const listEl = document.getElementById('todoList');
+        const saved = JSON.parse(localStorage.getItem('todo-'+room) || '{}');
 
-    function escapeHtml(s){
-      return (s??'').toString().replace(/[&<>"']/g, m => ({
-        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-      }[m]));
-    }
+        data.obvody.forEach(obvod=>{
+          const li = document.createElement('li');
+          if(saved[obvod.kod]) li.classList.add('done');
 
-    boot();
+          const chk = document.createElement('input');
+          chk.type='checkbox';
+          chk.checked = !!saved[obvod.kod];
+
+          const code = document.createElement('span');
+          code.className='pill';
+          code.textContent = obvod.kod;
+
+          const label = document.createElement('label');
+          label.textContent = obvod.nazov;
+
+          // klik → uložiť lokálne + poslať do Sheets
+          chk.onchange = async ()=>{
+            const status = chk.checked ? 'hotovo' : 'odznacene';
+            // lokálne
+            saved[obvod.kod] = chk.checked;
+            localStorage.setItem('todo-'+room, JSON.stringify(saved));
+            li.classList.toggle('done', chk.checked);
+
+            // cloud zápis
+            try{
+              msg('Ukladám…');
+              const res = await fetch(SHEET_API, {
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body: JSON.stringify({
+                  room,
+                  circuit: obvod.kod,
+                  label: obvod.nazov,
+                  status
+                })
+              });
+              if(!res.ok) throw new Error('HTTP '+res.status);
+              msg('Uložené.');
+              setTimeout(()=>msg(''), 1200);
+            }catch(e){
+              console.warn(e);
+              msg('Nepodarilo sa uložiť do cloudu (internet?). Skús neskôr.');
+            }
+          };
+
+          li.append(chk, code, label);
+          listEl.append(li);
+        });
+      })
+      .catch(()=>msg('Nenašiel som JSON pre túto izbu.'));
   </script>
 </body>
 </html>
