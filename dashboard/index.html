@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Stav poschodia</title>
+<title>Stav poschodia (debug)</title>
 <style>
   body{margin:0;background:#0b0d12;color:#e8ecf4;font-family:system-ui}
   .wrap{display:flex;gap:16px;padding:12px}
   .svgwrap{flex:1;position:relative;height:100vh;}
   .svgwrap svg{width:100%;height:auto;display:block;background:#fff}
   .room-done{ fill:#9aa0a6; fill-opacity:.35; }
-  .panel{width:320px;background:#121521;border:1px solid #1e2230;
-         border-radius:12px;padding:12px}
-  .badge{display:inline-block;background:#1e2a44;border:1px solid #2d3e63;
-         border-radius:999px;padding:2px 8px}
+  .panel{width:360px;background:#121521;border:1px solid #1e2230;border-radius:12px;padding:12px}
+  .badge{display:inline-block;background:#1e2a44;border:1px solid #2d3e63;border-radius:999px;padding:2px 8px}
+  .dbg{font-family:ui-monospace,Consolas,monospace;background:#0f1320;border:1px solid #1e2230;border-radius:8px;padding:8px;margin-top:10px;white-space:pre-wrap;font-size:12px;line-height:1.4}
+  .ok{color:#66ffa6} .err{color:#ff6b6b}
 </style>
 </head>
 <body>
@@ -24,30 +24,70 @@
   <div class="panel">
     <h3>Stav izieb</h3>
     <div id="status"></div>
+    <div id="dbg" class="dbg"></div>
   </div>
 </div>
 
-<!-- knižnica na zoom/pan -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
 <script>
 // 🔗 Doplň svoju Apps Script URL (končiacu /exec)
 const SHEET_API = 'https://script.google.com/macros/s/AKfycbws-p5Dcem0dwkXh_R3LG3p-y2DXLPQ6mYQ3YCQgg_1Ie7O_8JG02SmElSbk_Jof5GEDQ/exec';
 
-// ak máš floor.svg a mapping.json v root-e, použi ../
+// CESTY (ak máš floor.svg a mapping.json v root-e, použi ../)
 const SVG_URL = '../floor.svg';
 const MAP_URL = 'mapping.json';
 
 const svgHost   = document.getElementById('svgHost');
 const statusBox = document.getElementById('status');
+const dbgEl     = document.getElementById('dbg');
+
+const log = (m,kind='') => { dbgEl.innerHTML += (kind?`<span class="${kind}">`:'') + m + (kind?'</span>':'') + '\n'; };
 
 let mapping  = {};
 let panzoom  = null;
 let marksLayer = null;
 
+async function fetchText(url,label){
+  try{
+    const r = await fetch(url);
+    if(!r.ok){ log(`✗ ${label}: HTTP ${r.status}`,'err'); return null; }
+    log(`✓ ${label}: OK`,'ok');
+    return await r.text();
+  }catch(e){
+    log(`✗ ${label}: ${e.message}`,'err');
+    return null;
+  }
+}
+async function fetchJSON(url,label){
+  try{
+    const r = await fetch(url);
+    if(!r.ok){ log(`✗ ${label}: HTTP ${r.status}`,'err'); return null; }
+    const j = await r.json();
+    log(`✓ ${label}: OK (${Array.isArray(j)?j.length:Object.keys(j||{}).length} položiek)`,'ok');
+    return j;
+  }catch(e){
+    log(`✗ ${label}: ${e.message}`,'err');
+    return null;
+  }
+}
+
 async function loadSVGInline(url){
-  const txt = await fetch(url).then(r=>r.text());
+  const txt = await fetchText(url,'floor.svg');
+  if(!txt){ return null; }
   svgHost.innerHTML = txt;
   const svg = svgHost.querySelector('svg');
+  if(!svg){ log('✗ SVG element sa nenašiel','err'); return null; }
+
+  // ak chýba viewBox, pridáme ho z width/height (inak zoom nefunguje)
+  if(!svg.viewBox || (svg.viewBox.baseVal.width===0 && svg.getAttribute('viewBox')===null)){
+    const w = parseFloat(svg.getAttribute('width'))  || 2000;
+    const h = parseFloat(svg.getAttribute('height')) || 1500;
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    log(`• doplnený viewBox: 0 0 ${w} ${h}`);
+  } else {
+    const vb = svg.viewBox.baseVal;
+    log(`• viewBox: ${vb.x} ${vb.y} ${vb.width} ${vb.height}`,'ok');
+  }
 
   // vrstva pre značky
   marksLayer = svg.querySelector('#rk-marks');
@@ -57,7 +97,7 @@ async function loadSVGInline(url){
     svg.appendChild(marksLayer);
   }
 
-  // inicializuj zoom/pan
+  // pan/zoom
   if (panzoom) panzoom.destroy();
   panzoom = svgPanZoom(svg, {
     zoomEnabled: true,
@@ -66,14 +106,14 @@ async function loadSVGInline(url){
     center: true,
     mouseWheelZoomEnabled: true,
   });
+  log('✓ pan/zoom inicializovaný','ok');
 
   return svg;
 }
 
-// ✔ / ✗ priamo do SVG
 function placeTickSVG(room, circuit, done){
   const m = mapping[room]; if(!m) return;
-  const p = m.circuits?.[circuit]; if(!p) return;
+  const p = m.circuits?.[circuit]; if(!p){ log(`• chýba pozícia pre ${room}/${circuit} v mapping.json`); return; }
 
   const t = document.createElementNS('http://www.w3.org/2000/svg','text');
   t.setAttribute('x', p.x);
@@ -87,36 +127,53 @@ function placeTickSVG(room, circuit, done){
   marksLayer.appendChild(t);
 }
 
-// celé miestnosti na sivo
 function colorRoomIfAllDone(room, records){
   const m = mapping[room]; if(!m || !m.area_id) return;
   const needed = Object.keys(m.circuits||{});
   const doneSet = new Set(records.filter(r=>r.status==='hotovo').map(r=>r.circuit));
   const all = needed.length>0 && needed.every(k=>doneSet.has(k));
   const area = svgHost.querySelector('#'+m.area_id);
-  if (area) area.classList.toggle('room-done', all);
+  if (!area){ log(`• v SVG nie je element id="${m.area_id}"`); return; }
+  area.classList.toggle('room-done', all);
 }
 
 async function refresh(){
-  statusBox.innerHTML='';
-  await loadSVGInline(SVG_URL);
-  mapping = await fetch(MAP_URL).then(r=>r.json());
-  const res = await fetch(SHEET_API).then(r=>r.json()).catch(()=>({items:[]}));
+  dbgEl.innerHTML = ''; statusBox.innerHTML = '';
+  const svg = await loadSVGInline(SVG_URL);
+  if(!svg){ log('STOP: bez SVG nepokračujem','err'); return; }
+
+  // mapping
+  mapping = await fetchJSON(MAP_URL,'mapping.json');
+  if(!mapping){ log('STOP: bez mapping.json nepokračujem','err'); return; }
+  log(`• izby v mapping: ${Object.keys(mapping).join(', ')||'(žiadne)'}`);
+
+  // dáta zo Sheets
+  const res = await fetchJSON(SHEET_API,'SHEET_API (GET)');
+  const items = (res && res.items) ? res.items : [];
+  log(`• položky zo Sheets: ${items.length}`);
+
   const byRoom = {};
-  (res.items||[]).forEach(i => (byRoom[i.room] ||= []).push(i));
+  items.forEach(i => (byRoom[i.room] ||= []).push(i));
 
   // vymaž staré ✔
   while (marksLayer && marksLayer.firstChild) marksLayer.removeChild(marksLayer.firstChild);
 
+  // vykresli
   Object.keys(mapping).forEach(room=>{
-    const items = byRoom[room]||[];
-    const codes = Object.keys(mapping[room].circuits||{});
+    const roomMap = mapping[room];
+    if(!roomMap){ log(`• izba ${room} nie je v mapping.json`); return; }
+    const records = byRoom[room] || [];
+    const codes = Object.keys(roomMap.circuits||{});
+    log(`• ${room}: circuits in mapping=${codes.length}, v Sheets=${records.length}`);
+
     codes.forEach(code=>{
-      const rec = items.find(x=>x.circuit===code);
+      const rec = records.find(x=>x.circuit===code);
       placeTickSVG(room, code, !!rec && rec.status==='hotovo');
     });
-    colorRoomIfAllDone(room, items);
-    const done = items.filter(i=>i.status==='hotovo' && codes.includes(i.circuit)).length;
+
+    colorRoomIfAllDone(room, records);
+
+    const done = records.filter(i=>i.status==='hotovo' && codes.includes(i.circuit)).length;
     const div = document.createElement('div');
     div.innerHTML = `<div class="badge">${room}: ${done}/${codes.length} hotovo</div>`;
     statusBox.appendChild(div);
