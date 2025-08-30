@@ -15,6 +15,16 @@
   .dbg{font-family:ui-monospace,Consolas,monospace;background:#0f1320;border:1px solid #1e2230;border-radius:8px;padding:8px;margin-top:10px;white-space:pre-wrap;font-size:12px;line-height:1.4}
   .ok{color:#66ffa6} .err{color:#ff6b6b}
 </style>
+
+<!-- svg-pan-zoom lib + fallback (iba raz) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
+<script>
+  if (typeof window.svgPanZoom === 'undefined') {
+    const s = document.createElement('script');
+    s.src = 'https://unpkg.com/svg-pan-zoom/dist/svg-pan-zoom.min.js';
+    document.head.appendChild(s);
+  }
+</script>
 </head>
 <body>
 <div class="wrap">
@@ -27,23 +37,12 @@
     <div id="dbg" class="dbg"></div>
   </div>
 </div>
-<!-- svg-pan-zoom lib + fallback -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
-<script>
-  // fallback – ak by sa cdnjs nechytil
-  if (typeof window.svgPanZoom === 'undefined') {
-    var s = document.createElement('script');
-    s.src = 'https://unpkg.com/svg-pan-zoom/dist/svg-pan-zoom.min.js';
-    document.head.appendChild(s);
-  }
-</script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
 <script>
-// ==== UPRAV IBA TOTO: Apps Script /exec ====
+// ==== Apps Script /exec ====
 const SHEET_API = 'https://script.google.com/macros/s/AKfycbws-p5Dcem0dwkXh_R3LG3p-y2DXLPQ6mYQ3YCQgg_1Ie7O_8JG02SmElSbk_Jof5GEDQ/exec';
 
-// Použi ABSOLÚTNE linky, aby nebol problém s cestami:
+// Absolútne cesty (ľahšie debugovanie)
 const SVG_URL = 'https://rk-limit.github.io/rk-ar-demo/floor.svg';
 const MAP_URL = 'https://rk-limit.github.io/rk-ar-demo/mapping.json';
 
@@ -107,21 +106,22 @@ async function loadSVGInline(url){
   }
 
   // pan/zoom (vždy po načítaní SVG)
-if (typeof window.svgPanZoom !== 'undefined') {
-  if (panzoom) panzoom.destroy();
-  panzoom = svgPanZoom(svg, {
-    zoomEnabled: true,
-    controlIconsEnabled: true,
-    fit: true,
-    center: true,
-    mouseWheelZoomEnabled: true,
-  });
-  log('✓ pan/zoom inicializovaný','ok');
-} else {
-  log('✗ svg-pan-zoom knižnica sa nenačítala','err');
+  if (typeof window.svgPanZoom !== 'undefined') {
+    if (panzoom) panzoom.destroy();
+    panzoom = svgPanZoom(svg, {
+      zoomEnabled: true,
+      controlIconsEnabled: true,
+      fit: true,
+      center: true,
+      mouseWheelZoomEnabled: true,
+    });
+    log('✓ pan/zoom inicializovaný','ok');
+  } else {
+    log('✗ svg-pan-zoom knižnica sa nenačítala','err');
+  }
+
+  return svg;   // << DÔLEŽITÉ
 }
-
-
 
 function placeTickSVG(room, circuit, done){
   const m = mapping[room]; if(!m) return;
@@ -200,8 +200,3 @@ setInterval(refresh, 8000);
 </script>
 </body>
 </html>
-
-
-
-
-
