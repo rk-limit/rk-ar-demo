@@ -15,6 +15,16 @@
   .panel{width:320px;background:#121521;border:1px solid #1e2230;border-radius:12px;padding:12px}
   .badge{display:inline-block;background:#1e2a44;border:1px solid #2d3e63;border-radius:999px;padding:2px 8px}
 </style>
+<style>
+  svg {
+    width: 100%;
+    height: auto;
+    background: #fff; /* biele pozadie */
+  }
+  body {
+    background: #f0f0f0; /* celé okno bledosivé */
+  }
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -90,7 +100,18 @@ async function refresh(){
 refresh();
 setInterval(refresh, 5000);
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
+<script>
+  window.onload = function() {
+    svgPanZoom('svg', {
+      zoomEnabled: true,
+      controlIconsEnabled: true
+    });
+  };
+</script>
+
 </body>
 </html>
+
 
 
