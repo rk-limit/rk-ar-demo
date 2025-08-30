@@ -38,57 +38,90 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
 <script>
-const SHEET_API = 'https://script.google.com/macros/s/AKfycbws-p5Dcem0dwkXh_R3LG3p-y2DXLPQ6mYQ3YCQgg_1Ie7O_8JG02SmElSbk_Jof5GEDQ/exec'; // rovnaké ako v To-Do
+const SHEET_API = '.../exec';
 const SVG_URL = '../floor.svg';
 const MAP_URL = 'mapping.json';
 
 const svgHost = document.getElementById('svgHost');
-const overlay = document.getElementById('overlay');
 const statusBox = document.getElementById('status');
 let mapping = {};
+let panzoom = null;          // panzoom instance
+let marksLayer = null;       // <g> vrstva pre značky vo vnútri SVG
 
 async function loadSVGInline(url){
   const txt = await fetch(url).then(r=>r.text());
   svgHost.innerHTML = txt;
-  return svgHost.querySelector('svg');
+  const svg = svgHost.querySelector('svg');
+
+  // vytvor vrstvu pre značky vo vnútri SVG
+  marksLayer = svg.querySelector('#rk-marks');
+  if (!marksLayer) {
+    marksLayer = document.createElementNS('http://www.w3.org/2000/svg','g');
+    marksLayer.setAttribute('id','rk-marks');
+    svg.appendChild(marksLayer);
+  }
+
+  // init/obnov pan-zoom (po každom načítaní SVG)
+  if (panzoom) panzoom.destroy();
+  panzoom = svgPanZoom(svg, {
+    zoomEnabled: true,
+    controlIconsEnabled: true,
+    fit: true,
+    center: true,
+    mouseWheelZoomEnabled: true,
+  });
+
+  return svg;
 }
-function placeTick(room, circuit, done){
+
+// pridaj ✔/✗ priamo do SVG súradníc (vo viewBoxe)
+function placeTickSVG(room, circuit, done){
   const m = mapping[room]; if(!m) return;
   const p = m.circuits?.[circuit]; if(!p) return;
-  const svg = svgHost.querySelector('svg');
-  const vb = svg.viewBox.baseVal;
-  const rect = svg.getBoundingClientRect();
-  const x = (p.x - vb.x)/vb.width * rect.width;
-  const y = (p.y - vb.y)/vb.height* rect.height;
-  const el = document.createElement('div');
-  el.className = 'tick ' + (done?'done':'todo');
-  el.textContent = done ? '✔' : '✗';
-  el.style.left = x+'px'; el.style.top = y+'px';
-  overlay.appendChild(el);
+
+  const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+  t.setAttribute('x', p.x);
+  t.setAttribute('y', p.y);
+  t.setAttribute('text-anchor','middle');
+  t.setAttribute('dominant-baseline','central');
+  t.setAttribute('font-size', 40);              // uprav podľa mierky výkresu
+  t.setAttribute('font-weight','900');
+  t.setAttribute('fill', done ? '#31d158' : '#ff6666');
+  t.textContent = done ? '✔' : '✗';
+  marksLayer.appendChild(t);
 }
+
 function colorRoomIfAllDone(room, records){
   const m = mapping[room]; if(!m || !m.area_id) return;
   const needed = Object.keys(m.circuits||{});
   const doneSet = new Set(records.filter(r=>r.status==='hotovo').map(r=>r.circuit));
   const all = needed.length>0 && needed.every(k=>doneSet.has(k));
   const area = svgHost.querySelector('#'+m.area_id);
-  if (area) area.classList.toggle('room-done', all);
+  if (area) {
+    if (all) { area.classList.add('room-done'); }
+    else     { area.classList.remove('room-done'); }
+  }
 }
+
 async function refresh(){
-  overlay.innerHTML=''; statusBox.innerHTML='';
-  await loadSVGInline(SVG_URL);
+  statusBox.innerHTML='';
+  const svg = await loadSVGInline(SVG_URL);              // ← po tomto je pan-zoom aktívny
   mapping = await fetch(MAP_URL).then(r=>r.json());
   const res = await fetch(SHEET_API).then(r=>r.json());
   const byRoom = {};
   (res.items||[]).forEach(i => (byRoom[i.room] ||= []).push(i));
+
+  // vymaž staré značky a dokresli nové
+  while (marksLayer.firstChild) marksLayer.removeChild(marksLayer.firstChild);
 
   Object.keys(mapping).forEach(room=>{
     const items = byRoom[room]||[];
     const codes = Object.keys(mapping[room].circuits||{});
     codes.forEach(code=>{
       const rec = items.find(x=>x.circuit===code);
-      placeTick(room, code, !!rec && rec.status==='hotovo');
+      placeTickSVG(room, code, !!rec && rec.status==='hotovo');
     });
     colorRoomIfAllDone(room, items);
     const done = items.filter(i=>i.status==='hotovo' && codes.includes(i.circuit)).length;
@@ -97,9 +130,11 @@ async function refresh(){
     statusBox.appendChild(div);
   });
 }
+
 refresh();
-setInterval(refresh, 5000);
+setInterval(refresh, 8000);   // menej často, aby si si mohol zoomovať
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
 <script>
   window.onload = function() {
@@ -112,6 +147,7 @@ setInterval(refresh, 5000);
 
 </body>
 </html>
+
 
 
 
