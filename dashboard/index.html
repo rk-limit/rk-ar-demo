@@ -31,11 +31,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
 <script>
 // 🔗 Doplň svoju Apps Script URL (končiacu /exec)
+// 🔗 Doplň svoju Apps Script URL (končiacu /exec)
 const SHEET_API = 'https://script.google.com/macros/s/AKfycbws-p5Dcem0dwkXh_R3LG3p-y2DXLPQ6mYQ3YCQgg_1Ie7O_8JG02SmElSbk_Jof5GEDQ/exec';
 
-// CESTY (ak máš floor.svg a mapping.json v root-e, použi ../)
-const SVG_URL = '../floor.svg';
-const MAP_URL = '../mapping.json';
+// CESTY – použijeme absolútne linky z GitHub Pages
+const SVG_URL = 'https://rk-limit.github.io/rk-ar-demo/floor.svg';
+const MAP_URL = 'https://rk-limit.github.io/rk-ar-demo/mapping.json';
+
 
 const svgHost   = document.getElementById('svgHost');
 const statusBox = document.getElementById('status');
@@ -185,6 +187,7 @@ setInterval(refresh, 8000);
 </script>
 </body>
 </html>
+
 
 
 
