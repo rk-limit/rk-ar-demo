@@ -27,6 +27,16 @@
     <div id="dbg" class="dbg"></div>
   </div>
 </div>
+<!-- svg-pan-zoom lib + fallback -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
+<script>
+  // fallback – ak by sa cdnjs nechytil
+  if (typeof window.svgPanZoom === 'undefined') {
+    var s = document.createElement('script');
+    s.src = 'https://unpkg.com/svg-pan-zoom/dist/svg-pan-zoom.min.js';
+    document.head.appendChild(s);
+  }
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
 <script>
@@ -96,7 +106,8 @@ async function loadSVGInline(url){
     svg.appendChild(marksLayer);
   }
 
-  // pan/zoom (vždy po načítaní SVG)
+ // pan/zoom (vždy po načítaní SVG)
+if (typeof window.svgPanZoom !== 'undefined') {
   if (panzoom) panzoom.destroy();
   panzoom = svgPanZoom(svg, {
     zoomEnabled: true,
@@ -106,9 +117,10 @@ async function loadSVGInline(url){
     mouseWheelZoomEnabled: true,
   });
   log('✓ pan/zoom inicializovaný','ok');
-
-  return svg;
+} else {
+  log('✗ svg-pan-zoom knižnica sa nenačítala','err');
 }
+
 
 function placeTickSVG(room, circuit, done){
   const m = mapping[room]; if(!m) return;
@@ -187,5 +199,6 @@ setInterval(refresh, 8000);
 </script>
 </body>
 </html>
+
 
 
