@@ -106,20 +106,21 @@ async function loadSVGInline(url){
     svg.appendChild(marksLayer);
   }
 
- // pan/zoom (vždy po načítaní SVG)
-  if (typeof window.svgPanZoom !== 'undefined') {
-    if (panzoom) panzoom.destroy();
-    panzoom = svgPanZoom(svg, {
-      zoomEnabled: true,
-      controlIconsEnabled: true,
-      fit: true,
-      center: true,
-      mouseWheelZoomEnabled: true,
-    });
-    log('✓ pan/zoom inicializovaný','ok');
-  } else {
-    log('✗ svg-pan-zoom knižnica sa nenačítala','err');
-  }
+  // pan/zoom (vždy po načítaní SVG)
+if (typeof window.svgPanZoom !== 'undefined') {
+  if (panzoom) panzoom.destroy();
+  panzoom = svgPanZoom(svg, {
+    zoomEnabled: true,
+    controlIconsEnabled: true,
+    fit: true,
+    center: true,
+    mouseWheelZoomEnabled: true,
+  });
+  log('✓ pan/zoom inicializovaný','ok');
+} else {
+  log('✗ svg-pan-zoom knižnica sa nenačítala','err');
+}
+
 
 
 function placeTickSVG(room, circuit, done){
@@ -199,6 +200,7 @@ setInterval(refresh, 8000);
 </script>
 </body>
 </html>
+
 
 
 
