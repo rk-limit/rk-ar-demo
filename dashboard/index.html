@@ -30,19 +30,16 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
 <script>
-// 🔗 Doplň svoju Apps Script URL (končiacu /exec)
-// 🔗 Doplň svoju Apps Script URL (končiacu /exec)
+// ==== UPRAV IBA TOTO: Apps Script /exec ====
 const SHEET_API = 'https://script.google.com/macros/s/AKfycbws-p5Dcem0dwkXh_R3LG3p-y2DXLPQ6mYQ3YCQgg_1Ie7O_8JG02SmElSbk_Jof5GEDQ/exec';
 
-// CESTY – použijeme absolútne linky z GitHub Pages
+// Použi ABSOLÚTNE linky, aby nebol problém s cestami:
 const SVG_URL = 'https://rk-limit.github.io/rk-ar-demo/floor.svg';
 const MAP_URL = 'https://rk-limit.github.io/rk-ar-demo/mapping.json';
-
 
 const svgHost   = document.getElementById('svgHost');
 const statusBox = document.getElementById('status');
 const dbgEl     = document.getElementById('dbg');
-
 const log = (m,kind='') => { dbgEl.innerHTML += (kind?`<span class="${kind}">`:'') + m + (kind?'</span>':'') + '\n'; };
 
 let mapping  = {};
@@ -51,7 +48,7 @@ let marksLayer = null;
 
 async function fetchText(url,label){
   try{
-    const r = await fetch(url);
+    const r = await fetch(url, { cache:'no-store' });
     if(!r.ok){ log(`✗ ${label}: HTTP ${r.status}`,'err'); return null; }
     log(`✓ ${label}: OK`,'ok');
     return await r.text();
@@ -62,7 +59,7 @@ async function fetchText(url,label){
 }
 async function fetchJSON(url,label){
   try{
-    const r = await fetch(url);
+    const r = await fetch(url, { cache:'no-store' });
     if(!r.ok){ log(`✗ ${label}: HTTP ${r.status}`,'err'); return null; }
     const j = await r.json();
     log(`✓ ${label}: OK (${Array.isArray(j)?j.length:Object.keys(j||{}).length} položiek)`,'ok');
@@ -80,8 +77,8 @@ async function loadSVGInline(url){
   const svg = svgHost.querySelector('svg');
   if(!svg){ log('✗ SVG element sa nenašiel','err'); return null; }
 
-  // ak chýba viewBox, pridáme ho z width/height (inak zoom nefunguje)
-  if(!svg.viewBox || (svg.viewBox.baseVal.width===0 && svg.getAttribute('viewBox')===null)){
+  // viewBox (ak chýba)
+  if(!svg.getAttribute('viewBox')){
     const w = parseFloat(svg.getAttribute('width'))  || 2000;
     const h = parseFloat(svg.getAttribute('height')) || 1500;
     svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
@@ -91,7 +88,7 @@ async function loadSVGInline(url){
     log(`• viewBox: ${vb.x} ${vb.y} ${vb.width} ${vb.height}`,'ok');
   }
 
-  // vrstva pre značky
+  // vrstva na značky
   marksLayer = svg.querySelector('#rk-marks');
   if (!marksLayer) {
     marksLayer = document.createElementNS('http://www.w3.org/2000/svg','g');
@@ -99,7 +96,7 @@ async function loadSVGInline(url){
     svg.appendChild(marksLayer);
   }
 
-  // pan/zoom
+  // pan/zoom (vždy po načítaní SVG)
   if (panzoom) panzoom.destroy();
   panzoom = svgPanZoom(svg, {
     zoomEnabled: true,
@@ -140,46 +137,49 @@ function colorRoomIfAllDone(room, records){
 }
 
 async function refresh(){
-  dbgEl.innerHTML = ''; statusBox.innerHTML = '';
-  const svg = await loadSVGInline(SVG_URL);
-  if(!svg){ log('STOP: bez SVG nepokračujem','err'); return; }
+  try{
+    dbgEl.innerHTML = ''; statusBox.innerHTML = '';
 
-  // mapping
-  mapping = await fetchJSON(MAP_URL,'mapping.json');
-  if(!mapping){ log('STOP: bez mapping.json nepokračujem','err'); return; }
-  log(`• izby v mapping: ${Object.keys(mapping).join(', ')||'(žiadne)'}`);
+    const svg = await loadSVGInline(SVG_URL);
+    if(!svg){ log('STOP: bez SVG nepokračujem','err'); return; }
 
-  // dáta zo Sheets
-  const res = await fetchJSON(SHEET_API,'SHEET_API (GET)');
-  const items = (res && res.items) ? res.items : [];
-  log(`• položky zo Sheets: ${items.length}`);
+    mapping = await fetchJSON(MAP_URL,'mapping.json');
+    if(!mapping){ log('STOP: bez mapping.json nepokračujem','err'); return; }
+    log(`• izby v mapping: ${Object.keys(mapping).join(', ')||'(žiadne)'}`);
 
-  const byRoom = {};
-  items.forEach(i => (byRoom[i.room] ||= []).push(i));
+    const res = await fetchJSON(SHEET_API,'SHEET_API (GET)');
+    const items = (res && res.items) ? res.items : [];
+    log(`• položky zo Sheets: ${items.length}`);
 
-  // vymaž staré ✔
-  while (marksLayer && marksLayer.firstChild) marksLayer.removeChild(marksLayer.firstChild);
+    const byRoom = {};
+    items.forEach(i => (byRoom[i.room] ||= []).push(i));
 
-  // vykresli
-  Object.keys(mapping).forEach(room=>{
-    const roomMap = mapping[room];
-    if(!roomMap){ log(`• izba ${room} nie je v mapping.json`); return; }
-    const records = byRoom[room] || [];
-    const codes = Object.keys(roomMap.circuits||{});
-    log(`• ${room}: circuits in mapping=${codes.length}, v Sheets=${records.length}`);
+    // vymaž staré ✔
+    while (marksLayer && marksLayer.firstChild) marksLayer.removeChild(marksLayer.firstChild);
 
-    codes.forEach(code=>{
-      const rec = records.find(x=>x.circuit===code);
-      placeTickSVG(room, code, !!rec && rec.status==='hotovo');
+    Object.keys(mapping).forEach(room=>{
+      const roomMap = mapping[room];
+      const records = byRoom[room] || [];
+      const codes = Object.keys(roomMap.circuits||{});
+      log(`• ${room}: circuits in mapping=${codes.length}, v Sheets=${records.length}`);
+
+      codes.forEach(code=>{
+        const rec = records.find(x=>x.circuit===code);
+        placeTickSVG(room, code, !!rec && rec.status==='hotovo');
+      });
+
+      colorRoomIfAllDone(room, records);
+
+      const done = records.filter(i=>i.status==='hotovo' && codes.includes(i.circuit)).length;
+      const div = document.createElement('div');
+      div.innerHTML = `<div class="badge">${room}: ${done}/${codes.length} hotovo</div>`;
+      statusBox.appendChild(div);
     });
 
-    colorRoomIfAllDone(room, records);
-
-    const done = records.filter(i=>i.status==='hotovo' && codes.includes(i.circuit)).length;
-    const div = document.createElement('div');
-    div.innerHTML = `<div class="badge">${room}: ${done}/${codes.length} hotovo</div>`;
-    statusBox.appendChild(div);
-  });
+  }catch(e){
+    log('NEČAKANÁ CHYBA: '+e.message,'err');
+    console.error(e);
+  }
 }
 
 refresh();
@@ -187,7 +187,3 @@ setInterval(refresh, 8000);
 </script>
 </body>
 </html>
-
-
-
-
