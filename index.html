@@ -49,7 +49,12 @@
         if (!cfg) { alert('Izba nie je v rooms.json'); return; }
 
         document.getElementById('roomLink').href  = cfg.room_pdf;
-    
+           // link na celý plán poschodia
+        if (cfg.floor_pdf) {
+          document.getElementById('floorLink').href = cfg.floor_pdf;
+        } else {
+          document.getElementById('floorLink').style.display = 'none'; // skry ak neexistuje
+        }
        
        
         
@@ -62,6 +67,7 @@
   </script>
 </body>
 </html>
+
 
 
 
