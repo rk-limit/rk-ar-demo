@@ -1,0 +1,17 @@
+{
+  "room": "EZI6",
+  "obvody": [
+    { "kod": "UV3.1/F.7.1(NYM - J 3X2,5)", "nazov": "Zásuvky - Kupelka +  EZI 6" },
+    { "kod": "UV3.1/F.5.1(NYM - J 3X2,5)", "nazov": "Zásuvky – Chodba 4;5;6 Kupelka 4;5;6 " },
+    { "kod": "UV3.1/F.9.1(NYM - J 3X2,5)", "nazov": "Zásuvka" },
+    { "kod": "UV3.1/F.1.4(NYM - J 5X1,5)", "nazov": "Svetlo - Kupeka 4,5,6+ Chodba 4,5,6" },
+    { "kod": "UV3.1/F.2.4(NYM - J 5X1,5)", "nazov": "Svetlo EZI 4,5,6" },
+    { "kod": "RJ - 45", "nazov": "Dátova zásuvka" }
+  ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}
