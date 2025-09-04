@@ -47,11 +47,14 @@
       .then(map => {
         const cfg = map[room];
         if (!cfg) { alert('Izba nie je v rooms.json'); return; }
+    fetch('floor.json')
+      .then(r => r.json())
+      .then(map => {
+        const cfg = map[room];
+        if (!cfg) { alert('Izba nie je v floor.json'); return; }
 
-        // PDF
-   
-        // PDF
         document.getElementById('roomLink').href  = cfg.room_pdf;
+        document.getElementById('floorLink').href  = cfg.floor_pdf;
        
        
         
@@ -64,6 +67,7 @@
   </script>
 </body>
 </html>
+
 
 
 
