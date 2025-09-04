@@ -49,17 +49,10 @@
         if (!cfg) { alert('Izba nie je v rooms.json'); return; }
 
         // PDF
-        
-        // 2) načítaj rooms.json a nastav odkazy
-    fetch('floor.json')
-      .then(r => r.json())
-      .then(map => {
-        const cfg = map[room];
-        if (!cfg) { alert('Izba nie je v floor.json'); return; }
-
+   
         // PDF
         document.getElementById('roomLink').href  = cfg.room_pdf;
-        document.getElementById('floorLink').href  = cfg.floor_pdf;
+       
        
         
 
@@ -71,6 +64,7 @@
   </script>
 </body>
 </html>
+
 
 
 
