@@ -3,7 +3,9 @@
     "room_pdf": "pdf/EZI1.pdf"
   },
   "EZI2": {
-    "room_pdf": "pdf/EZI2.pdf"
+    "room_pdf": "pdf/EZI2.pdf",
+    "floor_pdf": "pdf/poschodiee.pdf",
+    "panel_pdf": "pdf/poschodiee.pdf"
     
   },
   "EZI3": {
@@ -28,6 +30,7 @@
     "room_pdf": "pdf/EZI9.pdf"
   }
 }
+
 
 
 
