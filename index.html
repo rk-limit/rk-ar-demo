@@ -41,32 +41,39 @@
     document.getElementById('title').textContent = `Jednotka ${room}`;
     document.getElementById('roomLabel').textContent = room;
 
-    // 2) načítaj rooms.json a nastav odkazy
     fetch('rooms.json')
-      .then(r => r.json())
-      .then(map => {
-        const cfg = map[room];
-        if (!cfg) { alert('Izba nie je v rooms.json'); return; }
+  .then(r => r.json())
+  .then(map => {
+    const cfg = map[room];
+    if (!cfg) { alert('Izba nie je v rooms.json'); return; }
 
-        document.getElementById('roomLink').href  = cfg.room_pdf;
-           // link na celý plán poschodia
-        if (cfg.floor_pdf) {
-          document.getElementById('floorLink').href = cfg.floor_pdf;
-        } else {
-          document.getElementById('floorLink').style.display = 'none'; // skry ak neexistuje
-        }
-       
-       
-        
+    // link na PDF izby
+    document.getElementById('roomLink').href  = cfg.room_pdf;
 
-        // To-Do a AR (s parametrom izby)
-        document.getElementById('todoLink').href = `todo/index.html?room=${encodeURIComponent(room)}`;
-        document.getElementById('arLink').href   = `ar/index.html?room=${encodeURIComponent(room)}`;
-      })
-      .catch(() => alert('Chýba súbor rooms.json alebo je zle napísaný.'));
+    // link na celý plán poschodia
+    if (cfg.floor_pdf) {
+      document.getElementById('floorLink').href = cfg.floor_pdf;
+    } else {
+      document.getElementById('floorLink').style.display = 'none'; // skry ak neexistuje
+    }
+
+    // link na plán rozvádzača
+    if (cfg.panel_pdf) {
+      document.getElementById('panelLink').href = cfg.panel_pdf;
+    } else {
+      document.getElementById('panelLink').style.display = 'none';
+    }
+
+    // To-Do a AR (s parametrom izby)
+    document.getElementById('todoLink').href = `todo/index.html?room=${encodeURIComponent(room)}`;
+    document.getElementById('arLink').href   = `ar/index.html?room=${encodeURIComponent(room)}`;
+  })
+  .catch(() => alert('Chýba súbor rooms.json alebo je zle napísaný.'));
+
   </script>
 </body>
 </html>
+
 
 
 
