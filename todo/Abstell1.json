@@ -5,9 +5,9 @@
     { "kod": "UV3.1/F.16.2(NYM - J 3X2,5)", "nazov": "Abstell" },
     { "kod": "UV3.1/F.16.3(NYM - J 3X2,5)", "nazov": "Abstell" },
     { "kod": "UV3.1/F.10.2(NYM - J 3X2,5)", "nazov": "Abstell" },
-    { "kod": "UV3.1/F.5.3(NYM - J 3X2,5)", "nazov": "Abstell" };
-    { "kod": "UV3.1/F.11.1(NYM - J 3X2,5)", "nazov": "Abstell" };
-    { "kod": "UV3.1/F.3.1(NYM - J 3X1,5)", "nazov": "Abstell - svetlo " };
+    { "kod": "UV3.1/F.5.3(NYM - J 3X2,5)", "nazov": "Abstell" },
+    { "kod": "UV3.1/F.11.1(NYM - J 3X2,5)", "nazov": "Abstell" },
+    { "kod": "UV3.1/F.3.1(NYM - J 3X1,5)", "nazov": "Abstell - svetlo " },
     { "kod": "RJ - 45)", "nazov": "Putz + Hyg - Svetlo" }
        
   ],
@@ -18,3 +18,4 @@
     "Práce navyše"
   ]
 }
+
