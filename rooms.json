@@ -1,8 +1,8 @@
 {
   "EZI1": {
     "room_pdf": "pdf/EZI1.pdf",
-    "floor_pdf": "pdf/poschodiee.pdf",
-    "panel_pdf": "pdf/poschodiee.pdf"
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
   },
   "EZI2": {
     "room_pdf": "pdf/EZI2.pdf",
@@ -12,40 +12,41 @@
   },
   "EZI3": {
     "room_pdf": "pdf/EZI3.pdf",
-    "floor_pdf": "pdf/poschodiee.pdf",
-    "panel_pdf": "pdf/poschodiee.pdf"
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
   },
   "EZI4": {
     "room_pdf": "pdf/EZI4.pdf",
-    "floor_pdf": "pdf/poschodiee.pdf",
-    "panel_pdf": "pdf/poschodiee.pdf"
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
   },
   "EZI5": {
     "room_pdf": "pdf/EZI5.pdf",
-    "floor_pdf": "pdf/poschodiee.pdf",
-    "panel_pdf": "pdf/poschodiee.pdf"
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
   },
   "EZI6": {
     "room_pdf": "pdf/EZI6.pdf",
-    "floor_pdf": "pdf/poschodiee.pdf",
-    "panel_pdf": "pdf/poschodiee.pdf"
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
   },
   "EZI7": {
     "room_pdf": "pdf/EZI7.pdf",
-    "floor_pdf": "pdf/poschodiee.pdf",
-    "panel_pdf": "pdf/poschodiee.pdf"
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
   },
   "EZI8": {
     "room_pdf": "pdf/EZI8.pdf",
-    "floor_pdf": "pdf/poschodiee.pdf",
-    "panel_pdf": "pdf/poschodiee.pdf"
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
   },
   "EZI9": {
     "room_pdf": "pdf/EZI9.pdf",
-    "floor_pdf": "pdf/poschodiee.pdf",
-    "panel_pdf": "pdf/poschodiee.pdf"
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
   }
 }
+
 
 
 
