@@ -1,0 +1,18 @@
+{
+  "room": "Abstell",
+  "obvody": [
+    { "kod": "UV3.1/F.15.2(NYM - J 3X2,5)", "nazov": "Abstell" },
+    { "kod": "UV3.1/F.15.3(NYM - J 3X2,5)", "nazov": "Waschmaschine" },
+    { "kod": "UV3.1/F.18.6(NYM - J 3X2,5)", "nazov": "Abstell" },
+    { "kod": "UV3.1/F.4.3(NYM - J 3x2,5)", "nazov": "Abstell" },
+    { "kod": "UV3.1/F.18.3(NYM - J 3X2,5)", "nazov": "Abstell" },
+    { "kod": "UV3.1/F.3.4(NYM - J 3X1,5)", "nazov": "Abstell - Svetlo" }
+    
+  ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}

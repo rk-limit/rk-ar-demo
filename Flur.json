@@ -1,0 +1,20 @@
+{
+  "room": "Flur",
+  "obvody": [
+    { "kod": "UV3.1/F.4.1(NYM - J 3X2,5)", "nazov": "Flur" },
+    { "kod": "UV3.1/F.4.2(NYM - J 3X2,5)", "nazov": "Flur" },
+    { "kod": "UV3.1/F.4.3(NYM - J 3X2,5)", "nazov": "Flur" },
+    { "kod": "UV3.1/F.1.1(NYM - J 5X1,5)", "nazov": "Flur - svetlo" },
+    { "kod": "UV3.1/F.1.2(NYM - J 5X1,5)", "nazov": "Flur - svetlo" },
+    { "kod": "UV3.1/F.2.1(NYM - J 5X1,5)", "nazov": "Flur - svetlo" },
+    { "kod": "UV3.1/F.2.2(NYM - J 5X1,5)", "nazov": "Flur - svetlo" },
+    { "kod": "RJ - 45)", "nazov": "Putz + Hyg - Svetlo" }
+       
+  ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}

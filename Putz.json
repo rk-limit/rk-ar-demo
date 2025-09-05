@@ -1,0 +1,18 @@
+{
+  "room": "Putz",
+  "obvody": [
+    { "kod": "UV3.1/F.10.1(NYM - J 3X2,5)", "nazov": "WC - R + PUTZ/HYG" },
+    { "kod": "UV3.1/F.18.1(NYM - J 3X1,5)", "nazov": "WC - R + Putz " },
+    { "kod": "UV3.1/F.5.3(NYM - J 3X2,5)", "nazov": "WC - R + Putz" },
+    { "kod": "UV3.1/F.3.1(NYM - J 3X1,5)", "nazov": "WC - R + Putz - Svetlo" },
+    { "kod": "UV3.1/F.15.1(NYM - J 5X2,5)", "nazov": "Putz + Hyg - Svetlo" };
+    { "kod": "RJ - 45)", "nazov": "Putz + Hyg - Svetlo" }
+       
+  ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}

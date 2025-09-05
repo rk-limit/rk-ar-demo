@@ -1,0 +1,22 @@
+{
+  "room": "Schwester",
+  "obvody": [
+    { "kod": "UV3.1/F.12.2(NYM - J 3X2,5)", "nazov": "Schwester - SP" },
+    { "kod": "UV3.1/F.10.6(NYM - J 3X2,5)", "nazov": "Schwester - KS" },
+    { "kod": "UV3.1/F.12.1(NYM - J 5X2,5)", "nazov": "Schwester - E herd" },
+    { "kod": "UV3.1/F.3.2(NYM - J 5X1,5)", "nazov": "Schwester + Kuche - Svetlo" },
+    { "kod": "UV3.1/F.12.3(NYM - J 3X2,5)", "nazov": "Schwester - MW" };
+    { "kod": "UV3.1/F.12.4(NYM - J 3X2,5)", "nazov": "Schwester" };
+    { "kod": "UV3.1/F.10.3(NYM - J 3X2,5)", "nazov": "Schwester " };
+    { "kod": "UV3.1/F.11.2(NYM - J 3X2,5)", "nazov": "Schwester " };
+    { "kod": "UV3.1/F.5.4(NYM - J 3X2,5)", "nazov": "Schwester + Kuche + Aufen" };
+    { "kod": "RJ - 45)", "nazov": "Putz + Hyg - Svetlo" }
+       
+  ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}

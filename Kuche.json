@@ -1,0 +1,23 @@
+{
+  "room": "Kuche",
+  "obvody": [
+    { "kod": "UV3.1/F.13.3(NYM - J 5X2,5)", "nazov": "Kuche" },
+    { "kod": "UV3.1/F.14.5(NYM - J 3X2,5)", "nazov": "Kuche" },
+    { "kod": "UV3.1/F.13.5(NYM - J 3X2,5)", "nazov": "Kuche - KS" },
+    { "kod": "UV3.1/F.13.4(NYM - J 3X2,5)", "nazov": "Kuche - MW" },
+    { "kod": "UV3.1/F.14.2(NYM - J 3X2,5)", "nazov": "Kuche" };
+    { "kod": "UV3.1/F.14.1(NYM - J 5X2,5)", "nazov": "Kuche" };
+    { "kod": "UV3.1/F.14.4(NYM - J 3X2,5)", "nazov": "Kuche" };
+    { "kod": "UV3.1/F.13.1(NYM - J 5X2,5)", "nazov": "Kuche" };
+    { "kod": "UV3.1/F.13.2(NYM - J 5X2,5)", "nazov": "Kuche" };
+    { "kod": "UV3.1/F.3.2(NYM - J 5X1,5)", "nazov": "Kuche - SVETLO" };
+    { "kod": "RJ - 45)", "nazov": "Putz + Hyg - Svetlo" }
+       
+  ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}
