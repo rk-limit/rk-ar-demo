@@ -44,8 +44,50 @@
     "room_pdf": "pdf/EZI9.pdf",
     "floor_pdf": "pdf/poschodie.pdf",
     "panel_pdf": "pdf/poschodie.pdf"
+  },
+  "Abstell": {
+    "room_pdf": "pdf/Abstell.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
+  },
+  "Abstell1": {
+    "room_pdf": "pdf/Abstell1.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
+  },
+  "Aufenth": {
+    "room_pdf": "pdf/Aufenth.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
+  },
+  "Kuche": {
+    "room_pdf": "pdf/Kuche.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
+  },
+  "Putz": {
+    "room_pdf": "pdf/Putz.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
+  },
+  "Schwester": {
+    "room_pdf": "pdf/Schwester.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
+  },
+  "WC - R": {
+    "room_pdf": "pdf/WC - R.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
+  },
+  "Wohnen": {
+    "room_pdf": "pdf/Wohnen.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
   }
+  
 }
+
 
 
 
