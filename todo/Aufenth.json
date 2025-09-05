@@ -3,7 +3,7 @@
   "obvody": [
     { "kod": "UV3.1/F.11.3(NYM - J 3X2,5)", "nazov": "Aufenth" },
     { "kod": "UV3.1/F.5.4(NYM - J 3X2,5)", "nazov": "Aufenth" },
-    { "kod": "UV3.1/F.3.3(NYM - J 5X1,5)", "nazov": "Aufenth - SVETLO" };
+    { "kod": "UV3.1/F.3.3(NYM - J 5X1,5)", "nazov": "Aufenth - SVETLO" },
     { "kod": "RJ - 45)", "nazov": "Putz + Hyg - Svetlo" }
        
   ],
@@ -13,4 +13,5 @@
     "Počet metrov",
     "Práce navyše"
   ]
+
 }
