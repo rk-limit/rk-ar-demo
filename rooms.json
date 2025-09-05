@@ -80,6 +80,11 @@
     "floor_pdf": "pdf/poschodie.pdf",
     "panel_pdf": "pdf/poschodie.pdf"
   },
+  "Flur": {
+    "room_pdf": "pdf/WC - R.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/poschodie.pdf"
+  },
   "Wohnen": {
     "room_pdf": "pdf/Wohnen.pdf",
     "floor_pdf": "pdf/poschodie.pdf",
@@ -87,6 +92,7 @@
   }
   
 }
+
 
 
 
