@@ -4,7 +4,7 @@
     { "kod": "UV3.1/F.11.5(NYM - J 3X2,5)", "nazov": "Wohnen" },
     { "kod": "UV3.1/F.10.4(NYM - J 3X2,5)", "nazov": "Wohnen" },
     { "kod": "UV3.1/F.3.3(NYM - J 5X1,5)", "nazov": "Wohnen - svetlo" },
-    { "kod": "RJ - 45", "nazov": "Wohnen" },
+    { "kod": "RJ - 45", "nazov": "Wohnen" }
        
   ],
   "poznamky": [
@@ -14,3 +14,4 @@
     "Práce navyše"
   ]
 }
+
