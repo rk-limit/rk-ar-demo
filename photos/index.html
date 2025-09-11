@@ -24,19 +24,25 @@
     .btn{display:inline-block;background:#1e2a44;border:1px solid var(--accent);color:#cde1ff;
       padding:10px 14px;border-radius:10px;text-decoration:none;cursor:pointer;font-weight:700}
     .btn:disabled{opacity:.6;cursor:not-allowed}
-    .msg{margin-top:10px;font-size:.95rem}
+    .msg{margin-top:10px;font-size:.95rem;min-height:1.4em}
     .ok{color:var(--ok)} .err{color:var(--err)} .muted{color:var(--muted)}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
     .thumb{background:#0f1320;border:1px solid var(--line);border-radius:12px;overflow:hidden}
     .thumb img{display:block;width:100%;height:140px;object-fit:cover}
-    .thumb footer{padding:8px 10px;font-size:.8rem;color:var(--muted)}
+    .thumb footer{padding:8px 10px;font-size:.8rem;color:var(--muted);display:flex;justify-content:space-between}
     .pill{display:inline-block;background:#1e2a44;border:1px solid var(--accent);color:#cde1ff;
       padding:2px 8px;border-radius:999px;font-size:.8rem}
+    .flex{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .hint{font-size:.85rem;color:var(--muted)}
   </style>
 </head>
 <body>
   <div class="wrap">
     <h1>📸 Fotky – <small id="roomTitle">…</small></h1>
+
+    <div class="card">
+      <div class="hint" id="health">Kontrolujem pripojenie…</div>
+    </div>
 
     <div class="card">
       <div class="row">
@@ -53,7 +59,14 @@
       <label for="photo">Fotka:</label>
       <input id="photo" type="file" accept="image/*" capture="environment" />
 
-      <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
+      <div class="flex" style="margin-top:8px">
+        <label class="hint">
+          <input type="checkbox" id="resize" checked />
+          Komprimovať na max. 1600 px (odporúčané)
+        </label>
+      </div>
+
+      <div style="margin-top:12px" class="flex">
         <button id="btnUpload" class="btn">Nahrať</button>
         <span id="msg" class="msg muted"></span>
       </div>
@@ -67,67 +80,115 @@
 
   <script>
     /************************************************************
-     * NASTAVENIE – doplň Apps Script /exec URL
+     * DOPLŇ tvoje Apps Script /exec URL
      ************************************************************/
     const PHOTOS_API = 'https://script.google.com/macros/s/AKfycby6Kt-JT6MqwRGjcOrZJw-Mgqn5lJHjFpxFzZc9at7jfluL9DWK9DjswkOath_tSxjJ/exec';
 
-    /************************************************************
-     * Pomocné prvky
-     ************************************************************/
-    const qs = new URLSearchParams(location.search);
-    const room = qs.get('room') || 'UNKNOWN';
-    document.getElementById('roomTitle').textContent = room;
+    /***************** Pomocné prvky a stav ********************/
+    const qs    = new URLSearchParams(location.search);
+    const room  = qs.get('room') || '';
+    const preWall = qs.get('wall') || '';
 
-    const elPhoto = document.getElementById('photo');
-    const elWall  = document.getElementById('wall');
-    const elNote  = document.getElementById('note');
-    const elMsg   = document.getElementById('msg');
-    const elBtn   = document.getElementById('btnUpload');
-    const elGal   = document.getElementById('gallery');
+    const elRoom = document.getElementById('roomTitle');
+    const elPhoto= document.getElementById('photo');
+    const elWall = document.getElementById('wall');
+    const elNote = document.getElementById('note');
+    const elMsg  = document.getElementById('msg');
+    const elBtn  = document.getElementById('btnUpload');
+    const elGal  = document.getElementById('gallery');
+    const elHC   = document.getElementById('health');
+    const elResize = document.getElementById('resize');
 
-    const msg = (t,kind='muted') => { elMsg.className = 'msg ' + kind; elMsg.textContent = t; };
+    elRoom.textContent = room || '—';
+    if (preWall) elWall.value = preWall;
+
+    function msg(t,kind='muted'){ elMsg.className='msg '+kind; elMsg.textContent=t; }
+    function health(t,kind='muted'){ elHC.className='hint '+kind; elHC.textContent=t; }
 
     function addThumb(url, caption=''){
       const div = document.createElement('div');
       div.className = 'thumb';
-      div.innerHTML = `<img src="${url}" alt="">
-        <footer>${caption ? `<span class="pill">${caption}</span>`:''}</footer>`;
+      div.innerHTML = `
+        <img src="${url}" alt="">
+        <footer>
+          ${caption ? `<span class="pill">${caption}</span>`:''}
+          <a class="hint" href="${url}" target="_blank">otvoriť</a>
+        </footer>`;
       elGal.prepend(div);
     }
 
-    /** prečíta súbor ako DataURL (base64) */
+    /** čítanie súboru do ImageBitmap (rýchle), potom kresba na canvas */
+    async function resizeToDataURL(file, maxSize=1600){
+      // ak kompresiu nechceš, použijeme pôvodný dataURL
+      if (!elResize.checked) return await fileToDataURL(file);
+
+      const bmp = await createImageBitmap(file);
+      const scale = Math.min(1, maxSize/Math.max(bmp.width, bmp.height));
+      const w = Math.round(bmp.width*scale), h = Math.round(bmp.height*scale);
+
+      const cvs = document.createElement('canvas'); cvs.width=w; cvs.height=h;
+      const ctx = cvs.getContext('2d');
+      ctx.drawImage(bmp, 0, 0, w, h);
+      const type = file.type || 'image/jpeg';
+      const quality = type.includes('jpeg') ? 0.85 : 1.0;
+      return cvs.toDataURL(type, quality);
+    }
     function fileToDataURL(file){
       return new Promise((resolve,reject)=>{
-        const fr = new FileReader();
-        fr.onload = () => resolve(fr.result);
-        fr.onerror = e => reject(e);
+        const fr=new FileReader();
+        fr.onload=()=>resolve(fr.result);
+        fr.onerror=e=>reject(e);
         fr.readAsDataURL(file);
       });
     }
 
-    /************************************************************
-     * Upload
-     ************************************************************/
+    /******************** Health-check (GET) *******************/
+    (async function check(){
+      try{
+        if(!room){
+          health('Chýba parameter ?room=… – upload je zakázaný.', 'err');
+          elBtn.disabled = true;
+          return;
+        }
+        if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/i.test(PHOTOS_API)){
+          health('Doplň PHOTOS_API na tvoje Apps Script /exec.', 'err');
+          elBtn.disabled = true;
+          return;
+        }
+        const r = await fetch(PHOTOS_API, { cache:'no-store' });
+        const j = await r.json().catch(()=>null);
+        if(j && j.ok){
+          health('Server OK – môžeš nahrávať ✅','ok');
+        }else{
+          health('Server odpovedal neplatne. Skontroluj nasadenie / oprávnenia.', 'err');
+        }
+      }catch(e){
+        health('Server je nedostupný. Skús sieť / oprávnenia Web App.', 'err');
+      }
+    })();
+
+    /************************ Upload ***************************/
     elBtn.onclick = async () => {
       try{
         const file = elPhoto.files[0];
         if(!file){ msg('Vyber fotku.', 'err'); return; }
+        if(!room){ msg('Chýba ?room=… v URL.', 'err'); return; }
 
-        msg('Konvertujem…');
-        const dataUrl = await fileToDataURL(file);
+        msg('Pripravujem fotku…');
+        const dataUrl = await resizeToDataURL(file, 1600);
 
         const payload = {
           room,
           wall: elWall.value.trim(),
           note: elNote.value.trim(),
-          imageBase64: dataUrl,         // obsahuje "data:image/...;base64,AAAA"
+          imageBase64: dataUrl,               // "data:image/...;base64,...."
           mimeType: file.type || 'image/jpeg',
           filename: `${room}_${(elWall.value.trim()||'WALL')}_${Date.now()}.jpg`,
-          author: ''                     // voliteľne doplň meno/ID
+          author: ''                          // ak chceš, doplň meno/ID montéra
         };
 
         elBtn.disabled = true;
-        msg('Nahrávam do cloudu…');
+        msg('Nahrávam na server…');
 
         const res = await fetch(PHOTOS_API, {
           method: 'POST',
@@ -135,15 +196,17 @@
           body: JSON.stringify(payload)
         });
 
-        // očakávame čistý JSON { ok:true, url, filename } z Apps Scriptu
-        const j = await res.json().catch(()=> ({}));
-        if(!j.ok){ throw new Error(j.error || 'Neplatná odpoveď servera'); }
+        if (!res.ok){
+          const text = await res.text();
+          throw new Error(`HTTP ${res.status} – ${text.slice(0,120)}`);
+        }
+
+        const j = await res.json().catch(()=>{ throw new Error('Server nevrátil JSON'); });
+        if(!j.ok) throw new Error(j.error || 'Neznáma chyba servera');
 
         msg('✅ Nahraté.', 'ok');
         addThumb(j.url, payload.wall || room);
-
-        // reset
-        elPhoto.value = '';
+        elPhoto.value = ''; // reset inputu
       }catch(err){
         console.error(err);
         msg('❌ ' + err.message, 'err');
@@ -151,16 +214,6 @@
         elBtn.disabled = false;
       }
     };
-
-    /************************************************************
-     * (Voliteľné) – ak chceš mať istotu, že je URL nastavená
-     ************************************************************/
-    if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/i.test(PHOTOS_API)){
-      msg('Upozornenie: doplň PHOTOS_API (Apps Script /exec URL).', 'err');
-      elBtn.disabled = true;
-    }
   </script>
 </body>
 </html>
-
-
