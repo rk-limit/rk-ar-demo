@@ -29,6 +29,7 @@
       <a id="arLink">🧩 Vizualizácia (AR – HIRO) <span>Otvorí kameru</span></a>
       <a id="todoLink">✅ To-Do list <span>Úlohy pre túto izbu</span></a>
       <a id="panelLink" target="_blank">⚡ Plán rozvádzača <span>PDF schéma</span></a>
+      <a id="photosLink">📸 Fotky miestnosti <span>Nahrať & prezerať</span></a>
     </div>
 
     <p class="muted">Ak sa niečo neotvára, skontroluj, či v linku je správne <code>?room=...</code></p>
@@ -50,8 +51,10 @@
       document.getElementById('panelLink').href = cfg.panel_pdf;
       document.getElementById('arLink').href    = `ar/index.html?room=${encodeURIComponent(room)}`;
       document.getElementById('todoLink').href  = `todo/index.html?room=${encodeURIComponent(room)}`;
+      document.getElementById('photosLink').href = `photos/index.html?room=${encodeURIComponent(room)}`;
     }
     boot();
   </script>
 </body>
 </html>
+
