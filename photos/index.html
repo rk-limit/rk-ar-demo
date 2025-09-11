@@ -169,54 +169,55 @@
 
     /************************ Upload ***************************/
     elBtn.onclick = async () => {
-      try{
-        const file = elPhoto.files[0];
-        if(!file){ msg('Vyber fotku.', 'err'); return; }
-        if(!room){ msg('Chýba ?room=… v URL.', 'err'); return; }
+    try{
+      const file = elPhoto.files[0];
+      if(!file){ msg('Vyber fotku.', 'err'); return; }
+      if(!room){ msg('Chýba ?room=… v URL.', 'err'); return; }
 
-        msg('Pripravujem fotku…');
-        const dataUrl = await resizeToDataURL(file, 1600);
+      msg('Pripravujem fotku…');
+      const dataUrl = await resizeToDataURL(file, 1600);
 
-        const payload = {
-          room,
-          wall: elWall.value.trim(),
-          note: elNote.value.trim(),
-          imageBase64: dataUrl,               // "data:image/...;base64,...."
-          mimeType: file.type || 'image/jpeg',
-          filename: `${room}_${(elWall.value.trim()||'WALL')}_${Date.now()}.jpg`,
-          author: ''                          // ak chceš, doplň meno/ID montéra
-        };
+      const payload = {
+        room,
+        wall: elWall.value.trim(),
+        note: elNote.value.trim(),
+        imageBase64: dataUrl,               // "data:image/...;base64,...."
+        mimeType: file.type || 'image/jpeg',
+        filename: `${room}_${(elWall.value.trim()||'WALL')}_${Date.now()}.jpg`,
+        author: ''
+      };
 
-        elBtn.disabled = true;
-        msg('Nahrávam na server…');
+      elBtn.disabled = true;
+      msg('Nahrávam na server…');
 
-        const res = await fetch(PHOTOS_API, {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify(payload)
-        });
+      // ⬇️ kľúčová zmena – žiadne headers
+      const res = await fetch(PHOTOS_API, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
 
-        if (!res.ok){
-          const text = await res.text();
-          throw new Error(`HTTP ${res.status} – ${text.slice(0,120)}`);
-        }
-
-        const j = await res.json().catch(()=>{ throw new Error('Server nevrátil JSON'); });
-        if(!j.ok) throw new Error(j.error || 'Neznáma chyba servera');
-
-        msg('✅ Nahraté.', 'ok');
-        addThumb(j.url, payload.wall || room);
-        elPhoto.value = ''; // reset inputu
-      }catch(err){
-        console.error(err);
-        msg('❌ ' + err.message, 'err');
-      }finally{
-        elBtn.disabled = false;
+      if (!res.ok){
+        const text = await res.text();
+        throw new Error(`HTTP ${res.status} – ${text.slice(0,120)}`);
       }
-    };
+
+      const j = await res.json().catch(()=>{ throw new Error('Server nevrátil JSON'); });
+      if(!j.ok) throw new Error(j.error || 'Neznáma chyba servera');
+
+      msg('✅ Nahraté.', 'ok');
+      addThumb(j.url, payload.wall || room);
+      elPhoto.value = '';
+    }catch(err){
+      console.error(err);
+      msg('❌ ' + err.message, 'err');
+    }finally{
+      elBtn.disabled = false;
+    }
+  };
   </script>
 </body>
 </html>
+
 
 
 
