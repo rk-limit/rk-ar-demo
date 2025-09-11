@@ -128,8 +128,37 @@
     }
   }
 
-  document.getElementById('uploadBtn').addEventListener('click', upload);
+  document.getElementById('uploadBtn').onclick = async () => {
+  const fileInput = document.getElementById('file');
+  const file = fileInput.files[0];
+  if (!file) return alert('Vyber súbor');
+
+  const reader = new FileReader();
+  reader.onload = async () => {
+    const base64 = reader.result.split(',')[1];
+
+    const payload = new URLSearchParams();
+    payload.append("file", base64);
+    payload.append("name", file.name);
+    payload.append("type", file.type);
+
+    const res = await fetch("https://script.google.com/macros/s/XXX/exec", {
+      method: "POST",
+      body: payload
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      alert("✅ Nahraté: " + data.url);
+    } else {
+      alert("❌ Chyba: " + data.error);
+    }
+  };
+  reader.readAsDataURL(file);
+};
+
 </script>
 </body>
 </html>
+
 
