@@ -206,7 +206,7 @@
     "panel_pdf": "pdf/B-1.V3P.pdf"
   },
   "B-1.V4": {
-    "room_pdf": "pdf/B-1.V3 - B-1.V4.pdf",
+    "room_pdf": "pdf/ine.pdf",
     "floor_pdf": "pdf/poschodie.pdf",
     "panel_pdf": "pdf/B-1.V4P.pdf"
   }
@@ -214,6 +214,7 @@
 
   
 }
+
 
 
 
