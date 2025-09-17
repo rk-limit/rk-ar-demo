@@ -89,9 +89,132 @@
     "room_pdf": "pdf/Wohnen.pdf",
     "floor_pdf": "pdf/poschodie.pdf",
     "panel_pdf": "pdf/poschodie.pdf"
+  },
+    "B-1.02": {
+    "room_pdf": "pdf/B-1.03B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.02P.pdf"
+  },
+  "B-1.03": {
+    "room_pdf": "pdf/B-1.03B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.03P.pdf"
+  },
+  "B-1.05": {
+    "room_pdf": "pdf/B-1.05B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.05P.pdf"
+  },
+  "B-1.06": {
+    "room_pdf": "pdf/B-1.06B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.06P.pdf"
+  },
+  "B-1.07": {
+    "room_pdf": "pdf/B-1.07B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.07P.pdf"
+  },
+  "B-1.08": {
+    "room_pdf": "pdf/B-1.08B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.08P.pdf"
+  },
+  "B-1.09": {
+    "room_pdf": "pdf/B-1.09B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.09P.pdf"
+  },
+  "B-1.10": {
+    "room_pdf": "pdf/B-1.10B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.10P.pdf"
+  },
+  "B-1.11": {
+    "room_pdf": "pdf/B-1.11B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.11P.pdf"
+  },
+  "B-1.12": {
+    "room_pdf": "pdf/B-1.12B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.12P.pdf"
+  },
+  "B-1.13": {
+    "room_pdf": "pdf/B-1.13B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.13P.pdf"
+  },
+  "B-1.14": {
+    "room_pdf": "pdf/B-1.14B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.14P.pdf"
+  },
+  "B-1.15": {
+    "room_pdf": "pdf/B-1.15B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.15P.pdf"
+  },
+  "B-1.16": {
+    "room_pdf": "pdf/B-1.16B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.16P.pdf"
+  },
+  "B-1.17": {
+    "room_pdf": "pdf/B-1.17B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.17P.pdf"
+  },
+  "B-1.18": {
+    "room_pdf": "pdf/B-1.18B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.18P.pdf"
+  },
+   "B-1.19": {
+    "room_pdf": "pdf/B-1.19B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.19P.pdf"
+  },
+  "B-1.20": {
+    "room_pdf": "pdf/B-1.20B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.20P.pdf"
+  },
+  "B-1.21": {
+    "room_pdf": "pdf/B-1.21B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.21P.pdf"
+  },
+  "B-1.22": {
+    "room_pdf": "pdf/B-1.22B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.22P.pdf"
+  },
+  "B-1.23": {
+    "room_pdf": "pdf/B-1.23B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.23P.pdf"
+  },
+  "B-1.V2": {
+    "room_pdf": "pdf/B-1.V2B.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.V2P.pdf"
+  },
+  ""B-1.V3": {
+    "room_pdf": "pdf/B-1.V3 - B-1.V4.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.V3P.pdf"
+  },
+  ""B-1.V4": {
+    "room_pdf": "B-1.V3 - B-1.V4.pdf",
+    "floor_pdf": "pdf/poschodie.pdf",
+    "panel_pdf": "pdf/B-1.V4P.pdf"
   }
   
+
+  
 }
+
 
 
 
