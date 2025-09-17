@@ -1,0 +1,17 @@
+{
+  "room": "B-1.22",
+  "obvody": [
+    { "kod": "UV5/5.F.1(NYM - J 3X1,5)", "nazov": "Fachberatung B-1.22 / Mikroskopie B-1.23" },
+    { "kod": "UV5/5.F.2(NYM - J 3X2,5)", "nazov": " Fachberatung B-1.22 " },
+    { "kod": "UV5/7.F.4(NYM - J 3X2,5)", "nazov": " Elektr. Schreibtisch Betriebsleiter B-1.20 /Fachberatung B-1.22" },
+    { "kod": "UV5/10.F.6(NYM - J 3X2,5)", "nazov": " EDV Betriebsleiter B-1.20 /
+ Fachberatung B-1.22" }
+        
+    ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}

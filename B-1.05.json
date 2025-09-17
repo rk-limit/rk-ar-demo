@@ -1,0 +1,14 @@
+{
+  "room": "B-1.05",
+  "obvody": [
+    { "kod": "UV5/1.F.3(NYM - J 3X2,5)", "nazov": " Vorraum WC-Damen B-1.05,WC-Damen B-1.06" },
+    { "kod": "UV5/2.F.3(NYM - J 3X1,5)", "nazov": "Vorraum WC-Damen, B-1.05 / WC-Damen B-1.06" },
+    { "kod": "UV5/8.F.6(NYM - J 3X2,5)", "nazov": " Waschtische + Urinale/WC-Herren B-1.08 /Vorraum WC-Damen/B-1.05 / Vorraum WC-Herren B-1.07" }
+    ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}

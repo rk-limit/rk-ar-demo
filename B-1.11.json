@@ -1,0 +1,13 @@
+{
+  "room": "B-1.10",
+  "obvody": [
+    { "kod": "UV5/1.F.6(NYM - J 3X2,5)", "nazov": "Kopierraum B-1.11" },
+    { "kod": "UV5/12.F.1(NYM - J 5X1,5)", "nazov": " Kopierraum B-1.11 /Lager Labor B-1.12 /ServerraumB-1.13" }
+    ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}

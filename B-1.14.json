@@ -1,0 +1,16 @@
+{
+  "room": "B-1.14",
+  "obvody": [
+    { "kod": "UV5/1.F.7(NYM - J 3X1,5)", "nazov": " Vorzimmer B-1.14" },
+    { "kod": "UV5/2.F.7(NYM - J 3X2,5)", "nazov": "Vorzimmer B-1.14" },
+    { "kod": "UV5/3.F.4(NYM - J 3X2,5)", "nazov": " Elektr. Schreibtisch/Vorzimmer B-1.14 /InstitutsleiterB-1.15" },
+    { "kod": "UV5/4.F.6(NYM - J 3X2,5)", "nazov": " Heizung B-1.14" },
+    { "kod": "UV5/10.F.1(NYM - J 3X2,5)", "nazov": "EDV Vorzimmer B-1.14" }
+    ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}

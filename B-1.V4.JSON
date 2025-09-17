@@ -1,0 +1,14 @@
+{
+  "room": "B-1.V4",
+  "obvody": [
+    { "kod": "UV5/6.F.1(NYM - J 3X1,5)", "nazov": "Ausstellungsbeleuchtung1 Flur-Ausstellung B-1.V3 /Foyertreppe B-1.V4" },
+    { "kod": "UV5/6.F.2(NYM - J 3X1,5)", "nazov": "Ausstellungsbeleuchtung2 Foyertreppe B-1.V4" },
+    { "kod": "UV5/12.F.5(NYM - J 3X2,5)", "nazov": " Foyertreppe2 B-1.V4" }        
+    ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}

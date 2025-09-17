@@ -1,0 +1,15 @@
+{
+  "room": "B-1.03",
+  "obvody": [
+    { "kod": "UV5/1.F.2(NYM - J 3X2,5)", "nazov": "B-1.03" },
+    { "kod": "UV5/2.F.2(NYM - J 3X1,5)", "nazov": "Beh.WC B-1.03" },
+    { "kod": "UV5/8.F.5(NYM - J 3X1,5)", "nazov": "WC-Spülberstätigung,Waschtisch,Optoelektronik,Beh.WC,B-1.03" },
+    { "kod": "UV5/13.F.3(NYM - J 3X1,5)", "nazov": "Beh.Raufanlage, WC barr.frei B-1.03" }
+    ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}

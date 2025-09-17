@@ -1,0 +1,15 @@
+{
+  "room": "B-1.16",
+  "obvody": [
+    { "kod": "UV5/3.F.2(NYM - J 3X1,5)", "nazov": "  2.Imkereimeister B-1.16 / Wiss.2 B-1.17" },
+    { "kod": "UV5/3.F.5(NYM - J 3X2,5)", "nazov": " Elektr. Schreibtisch 2.Imkereimeister B-1.16" },
+    { "kod": "UV5/4.F.1(NYM - J 3X2,5)", "nazov": "  2.Imkereimeister B-1.16" },
+    { "kod": "UV5/10.F.3(NYM - J 3X2,5)", "nazov": " EDV Imkereimeister B-1.16" }
+    ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}

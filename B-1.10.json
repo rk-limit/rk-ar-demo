@@ -1,0 +1,14 @@
+{
+  "room": "B-1.10",
+  "obvody": [
+    { "kod": "UV5/1.F.5(NYM - J 3X2,5)", "nazov": "  Vorraum Tiefkühlung,B-1.09 / Tiefkühlung B-1.10" },
+    { "kod": "UV5/2.F.5(NYM - J 3X1,5)", "nazov": "Vorraum Tiefkühlung/B-1.09 / Tiefkühlung B-1.10" },
+    { "kod": "UV5/13.F.4(NYM - J 3X2,5)", "nazov": " Verdampfer Tiefkälte B-1.10" }
+    ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}

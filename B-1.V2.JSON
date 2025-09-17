@@ -1,0 +1,15 @@
+{
+  "room": "B-1.V2",
+  "obvody": [
+    { "kod": "UV5/7.F.6(NYM - J 3X2,5)", "nazov": " Access-Point Flur Büros B-1.V2" },
+    { "kod": "UV5/12.F.2(NYM - J 5X1,5)", "nazov": "Flur Büros B-1.V2" },
+    { "kod": "UV5/12.F.6(NYM - J 5X1,5)", "nazov": " Feststellanlage Flur Büros B-1.V2" },
+    { "kod": "UV5/13.F.1(NYM - J 3X2,5)", "nazov": " Flur Büros B-1.V2" }        
+    ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}

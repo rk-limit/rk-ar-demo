@@ -1,0 +1,15 @@
+{
+  "room": "B-1.15",
+  "obvody": [
+    { "kod": "UV5/3.F.1(NYM - J 3X2,5)", "nazov": "  Institutsleiter B-1.15" },
+    { "kod": "UV5/3.F.4(NYM - J 3X2,5)", "nazov": " Elektr. Schreibtisch, Vorzimmer B-1.14 /Institutsleiter B-1.15" },
+    { "kod": "UV5/10.F.3(NYM - J 3X2,5)", "nazov": " EDV Institutsleiter B-1.15" },
+    { "kod": "UV5/11.F.3(NYM - J 3X2,5)", "nazov": " Sonnenschutzsteuerung Institutsleiter B-1.15" }
+    ],
+  "poznamky": [
+    "Frézovanie / drážkovanie",
+    "Urobiť fotku s čiarou",
+    "Počet metrov",
+    "Práce navyše"
+  ]
+}
