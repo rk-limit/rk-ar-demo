@@ -91,7 +91,7 @@
     "panel_pdf": "pdf/poschodie.pdf"
   },
     "B-1.02": {
-    "room_pdf": "pdf/B-1.03B.pdf",
+    "room_pdf": "pdf/B-1.02B.pdf",
     "floor_pdf": "pdf/poschodie.pdf",
     "panel_pdf": "pdf/B-1.02P.pdf"
   },
@@ -214,6 +214,7 @@
 
   
 }
+
 
 
 
