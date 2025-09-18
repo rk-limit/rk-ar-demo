@@ -163,7 +163,8 @@ function colorRoomIfAllDone(room, records){
   const needed = Object.keys(m.circuits||{});
   const doneSet = new Set(records.filter(r=>r.status==='hotovo').map(r=>r.circuit));
   const all = needed.length>0 && needed.every(k=>doneSet.has(k));
-  const area = svgHost.querySelector('#'+m.area_id);
+  const svg = svgHost.querySelector('svg');
+  const area = svg ? svg.getElementById(m.area_id) : null;
   if (!area){ log(`• v SVG nie je element id="${m.area_id}"`); return; }
   area.classList.toggle('room-done', all);
 }
@@ -219,4 +220,5 @@ setInterval(refresh, 8000);
 </script>
 </body>
 </html>
+
 
