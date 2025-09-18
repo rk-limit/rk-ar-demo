@@ -42,31 +42,20 @@
 // ==== Apps Script /exec ====
 const SHEET_API = 'https://script.google.com/macros/s/AKfycbws-p5Dcem0dwkXh_R3LG3p-y2DXLPQ6mYQ3YCQgg_1Ie7O_8JG02SmElSbk_Jof5GEDQ/exec';
 
-// Absolútne cesty (ľahšie debugovanie)
-<script>
 // --- výber plánu: bez parametra = legacy (floor.svg + mapping.json), s ?plan=L1 = nové súbory
 const params = new URLSearchParams(location.search);
 const PLAN = (params.get('plan') || 'legacy').toUpperCase();
 
-// zostav URL podľa plánu
+// zostav URL podľa plánu (nič tu NEVKLADAŤ ďalším <script>!)
 function buildUrls() {
   const base = 'https://rk-limit.github.io/rk-ar-demo/dashboard/';
   if (PLAN === 'L1') {
-    return {
-      svg: base + 'floorL1.svg',
-      map: base + 'mappingL1.json'
-    };
+    return { svg: base + 'floorL1.svg', map: base + 'mappingL1.json' };
   }
   // default (legacy)
-  return {
-    svg: base + 'floor.svg',
-    map: base + 'mapping.json'
-  };
+  return { svg: base + 'floor.svg', map: base + 'mapping.json' };
 }
-
 const { svg: SVG_URL, map: MAP_URL } = buildUrls();
-</script>
-
 
 const svgHost   = document.getElementById('svgHost');
 const statusBox = document.getElementById('status');
@@ -142,7 +131,7 @@ async function loadSVGInline(url){
     log('✗ svg-pan-zoom knižnica sa nenačítala','err');
   }
 
-  return svg;   // << DÔLEŽITÉ
+  return svg;
 }
 
 function placeTickSVG(room, circuit, done){
@@ -154,7 +143,7 @@ function placeTickSVG(room, circuit, done){
   t.setAttribute('y', p.y);
   t.setAttribute('text-anchor','middle');
   t.setAttribute('dominant-baseline','central');
-  t.setAttribute('font-size', 40); // uprav podľa mierky
+  t.setAttribute('font-size', 40);
   t.setAttribute('font-weight','900');
   t.setAttribute('fill', done ? '#31d158' : '#ff6666');
   t.textContent = done ? '✔' : '✗';
@@ -222,4 +211,3 @@ setInterval(refresh, 8000);
 </script>
 </body>
 </html>
-
