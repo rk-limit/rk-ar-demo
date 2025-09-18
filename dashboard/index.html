@@ -43,8 +43,30 @@
 const SHEET_API = 'https://script.google.com/macros/s/AKfycbws-p5Dcem0dwkXh_R3LG3p-y2DXLPQ6mYQ3YCQgg_1Ie7O_8JG02SmElSbk_Jof5GEDQ/exec';
 
 // Absolútne cesty (ľahšie debugovanie)
-const SVG_URL = 'https://rk-limit.github.io/rk-ar-demo/floor.svg';
-const MAP_URL = 'https://rk-limit.github.io/rk-ar-demo/mapping.json';
+<script>
+// --- výber plánu: bez parametra = legacy (floor.svg + mapping.json), s ?plan=L1 = nové súbory
+const params = new URLSearchParams(location.search);
+const PLAN = (params.get('plan') || 'legacy').toUpperCase();
+
+// zostav URL podľa plánu
+function buildUrls() {
+  const base = 'https://rk-limit.github.io/rk-ar-demo/dashboard/';
+  if (PLAN === 'L1') {
+    return {
+      svg: base + 'floorL1.svg',
+      map: base + 'mappingL1.json'
+    };
+  }
+  // default (legacy)
+  return {
+    svg: base + 'floor.svg',
+    map: base + 'mapping.json'
+  };
+}
+
+const { svg: SVG_URL, map: MAP_URL } = buildUrls();
+</script>
+
 
 const svgHost   = document.getElementById('svgHost');
 const statusBox = document.getElementById('status');
@@ -200,3 +222,4 @@ setInterval(refresh, 8000);
 </script>
 </body>
 </html>
+
